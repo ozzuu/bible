@@ -1,0 +1,5 @@
+@url = http://localhost:8080
+
+POST {{url}}/api/delUser HTTP/1.1
+
+###

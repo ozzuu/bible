@@ -1,0 +1,5 @@
+@url = http://localhost:8080
+
+GET {{url}} HTTP/1.1
+
+###
