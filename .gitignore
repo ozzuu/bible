@@ -2,3 +2,4 @@ build
 .env
 *.log
 db/tmp
+db/all.db
