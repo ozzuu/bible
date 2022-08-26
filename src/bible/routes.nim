@@ -12,7 +12,7 @@ type
 const
   routesDefinition*: seq[Route] = @[ ## All application routes
     ("", @[
-      pattern("/", r_home, HttpGet, "home"),
+      pattern("/{doc}/{book}/{verse}", r_home, HttpGet, "home"),
     ]),
   ]
 

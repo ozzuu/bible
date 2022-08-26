@@ -5,4 +5,10 @@ import bible/routeUtils
 proc r_home*(ctx: Context) {.async.} =
   ## Homepage
   ctx.forceHttpMethod HttpGet
-  resp "Hello World!"
+  let
+    doc = ctx.getPathParams("doc")
+    book = ctx.getPathParams("book")
+    verse = ctx.getPathParams("verse")
+
+  let books = getAllDocs()
+  resp "Reading " & doc

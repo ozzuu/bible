@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.2.0"
 author        = "Thiago Navarro"
 description   = "Ozzuu Bible"
 license       = "MIT"
@@ -14,8 +14,12 @@ binDir = "build"
 
 requires "nim >= 1.6.4"
 
+# Backend
 requires "prologue"
 requires "norm"
+requires "cligen"
+
+# Frontend
 requires "karax"
 
 proc defaultSwitch =

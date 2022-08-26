@@ -204,3 +204,6 @@ proc getUsing*(
       let val = node{field}.getStr
       result = table.get(val, [inDb])
       break
+
+proc getAllDocs*: seq[string] =
+  discard

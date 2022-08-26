@@ -2,7 +2,10 @@
 
 ## Version 0.2.0 (Aug 26, 2022) UNFINISHED
 
-- Added DB models
+- Added raw DB models
+- Added processed models
+- Added a subcommand to add a document to the main DB
+- Added parsing and merging of one kind of document
 
 ---
 

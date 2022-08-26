@@ -15,11 +15,3 @@ proc url*(path: string): string =
     var link = address
     link.path = path
     result = $link
-
-func delInternals*(node: var JsonNode) =
-  ## Deletes all DB internals fields from a JSON node
-  const internalDbPrefixLen = internalDbPrefix.len
-  for key in node.keys:
-    if key.len > internalDbPrefixLen:
-      if key[0..<internalDbPrefixLen] == internalDbPrefix:
-        node.delete key

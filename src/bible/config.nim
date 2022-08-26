@@ -1,36 +1,3 @@
-const internalDbPrefix* = "internal_"
-
-# session
-const sess_username* = "username"
-
-# activation
-const activationCodeLen* = 6
-
-# error messages
-const
-  userNotExists* = "User not exists"
-
-  ifContainsAllErr* = "Please provide $1"
-  ifContainsAtLeastErr* = "Please provide at least $1"
-  ifContainsInvalidReq* = "Invalid request"
-
-  needLogin* = "User not logged in. Please signin"
-  needLogoff* = "User logged in. Please logoff"
-
-  rankNotMeet* = "Permission denied"
-
-  invalidPassword* = "Invalid password"
-  invalidActivCode* = "Invalid activation code"
-  userAlreadyActivated* = "User already activated"
-  successActivation* = "User successfully activated"
-
-# user getting in DB
-const
-  userIdentifiers* = {
-    "_username": "username",
-    "_email": "email"
-  }
-
 from std/uri import Uri, parseUri
 from std/strutils import parseInt
 
@@ -67,18 +34,8 @@ let
     address = host
   )
 
-  smtpServer* = env.getOrDefault("smtpServer", "")
-  smtpPort* = env.getOrDefault("smtpPort", 587)
-  smtpTls* = env.getOrDefault("smtpTls", true)
-  smtpFrom* = env.getOrDefault("smtpFrom", "")
-  smtpUser* = env.getOrDefault("smtpUser", "")
-  smtpPass* = env.getOrDefault("smtpPass", "")
-
   errorLog* = env.getOrDefault("errorLog", "error.log")
   rollingLog* = env.getOrDefault("rollingLog", "rolling.log")
-
-  hashExpiringHours* = env.getOrDefault("hashExpiringHours",
-      2) ## How much hours to expire the hash used in links
 
 # {.pop.}
 
