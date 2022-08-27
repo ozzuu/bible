@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.2.0 (Aug 26, 2022) UNFINISHED
+## Version 0.2.0 (Aug 26, 2022)
 
 - Added raw DB models
 - Added processed models
