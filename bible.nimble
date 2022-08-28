@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.2.1"
+version       = "0.3.0"
 author        = "Thiago Navarro"
 description   = "Ozzuu Bible"
 license       = "MIT"
@@ -8,7 +8,6 @@ srcDir        = "src"
 bin           = @["bible"]
 
 binDir = "build"
-
 
 # Dependencies
 
@@ -18,6 +17,8 @@ requires "nim >= 1.6.4"
 requires "prologue"
 requires "norm"
 requires "cligen"
+
+requires "util"
 
 # Frontend
 requires "karax"

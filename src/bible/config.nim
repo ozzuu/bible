@@ -3,6 +3,11 @@ from std/strutils import parseInt
 
 import pkg/prologue
 
+const
+  ifContainsAllErr* = "Please provide $1"
+  ifContainsAtLeastErr* = "Please provide at least $1"
+  ifContainsInvalidReq* = "Invalid request"
+
 func parseAddress(url: Uri): tuple[hasSsl: bool; host: string; port: int] =
   ## Parses the address into `haveSsl`, `host` and `port`
   result.hasSsl = url.scheme == "https"

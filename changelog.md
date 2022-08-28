@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 0.3.0 (Aug 28, 2022)
+
+- Added `Document`s table
+- Added the content fetching in home route
+- Added views (using karax)
+- Added books, verses and versicles routes
+
+---
+
 ## Version 0.2.1 (Aug 27, 2022)
 
 - Removed 10 lines db strip in release version

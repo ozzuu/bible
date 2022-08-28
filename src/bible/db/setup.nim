@@ -3,7 +3,8 @@ import bible/db
 import bible/db/models/[
   book,
   info,
-  verse
+  verse,
+  document
 ]
 
 proc setup*(conn: DbConn) =
@@ -11,3 +12,4 @@ proc setup*(conn: DbConn) =
   conn.createTables newBook()
   conn.createTables newInfo()
   conn.createTables newVerse()
+  conn.createTables newDocument()

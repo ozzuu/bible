@@ -1,6 +1,9 @@
 import pkg/prologue
 
-import bible/routes/home
+import bible/routes/[
+  versicles,
+  verses
+]
 
 import bible/routes/default/notFound
 
@@ -12,7 +15,8 @@ type
 const
   routesDefinition*: seq[Route] = @[ ## All application routes
     ("", @[
-      pattern("/{doc}/{book}/{verse}", r_home, HttpGet, "home"),
+      pattern("/{doc}/{book}/{verse}", r_versicles, HttpGet, "vesicles"),
+      pattern("/{doc}/{book}", r_verses, HttpGet, "verses"),
     ]),
   ]
 

@@ -10,7 +10,7 @@ import bible/db
 import bible/db/setup
 
 
-proc main =
+proc serve =
   inDb:
     dbConn = open(dbHost, dbUser, dbPass, "")
     setup dbConn
@@ -64,7 +64,8 @@ from std/strformat import fmt
 import bible/db/models/[
   book,
   info,
-  verse
+  verse,
+  document
 ]
 
 proc addDb(db, docName: string; user = ""; pass = "") =
@@ -87,6 +88,11 @@ proc addDb(db, docName: string; user = ""; pass = "") =
   proc enumToSeq(e: type): seq[string] =
     for x in e:
       result.add $x
+
+  block addDoc:
+    echo "Adding document"
+    var doc = newDocument docName
+    inDb: sqlite.insert(dbConn, doc)
 
 
   block getBooks:
@@ -147,7 +153,7 @@ proc addDb(db, docName: string; user = ""; pass = "") =
 
 when isMainModule:
   import pkg/cligen
-  dispatchMulti([main], [
+  dispatchMulti([bible.serve], [
     addDb,
     short = {"docName": 'n'}
   ])
