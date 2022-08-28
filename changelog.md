@@ -1,6 +1,12 @@
 # Changelog
 
-## Version 0.2.0 (Aug 26, 2022) UNFINISHED
+## Version 0.2.1 (Aug 27, 2022)
+
+- Removed 10 lines db strip in release version
+
+---
+
+## Version 0.2.0 (Aug 26, 2022)
 
 - Added raw DB models
 - Added processed models

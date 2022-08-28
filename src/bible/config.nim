@@ -26,9 +26,10 @@ let
   (haveSsl*, host*, port*) = parseAddress address
 
   appName* = env.getOrDefault("appName", "bible")
+  debugging* = env.getOrDefault("debug", true)
   settings* = newSettings(
     appName = appName,
-    debug = env.getOrDefault("debug", true),
+    debug = debugging,
     port = Port port,
     secretKey = env.getOrDefault("secretKey", ""),
     address = host

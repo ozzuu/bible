@@ -11,12 +11,14 @@ type
     language*: string
     detailedInfo*: string
     origin*: string
+    changelog*: string
 
 proc newInfo*(
   docName: string;
   description, language: string;
   detailedInfo: string;
-  origin: string
+  origin: string;
+  changelog: string
 ): Info =
   ## Creates new `Info`
   new result
@@ -25,6 +27,7 @@ proc newInfo*(
   result.language = language
   result.detailedInfo = detailedInfo
   result.origin = origin
+  result.changelog = changelog
 
 proc newInfo*: Info =
   ## Creates new blank `Info`
@@ -34,4 +37,5 @@ proc newInfo*: Info =
     language = "",
     detailedInfo = "",
     origin = "",
+    changelog = "",
   )

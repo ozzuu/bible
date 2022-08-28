@@ -80,7 +80,10 @@ proc addDb(db, docName: string; user = ""; pass = "") =
     var query = fmt"""SELECT {columns.join ", "} FROM ?"""
     if orderBy.len > 0:
       query.add fmt" ORDER BY {orderBy}"
-    result = dbSqlite.getAllRows(newDbConn, sql query, table)[0..10]
+    result = dbSqlite.getAllRows(newDbConn, sql query, table)
+    if debugging:
+      if result.len > 10:
+        result = result[0..10]
   proc enumToSeq(e: type): seq[string] =
     for x in e:
       result.add $x
@@ -89,9 +92,9 @@ proc addDb(db, docName: string; user = ""; pass = "") =
   block getBooks:
     echo "Adding books"
     type Book = enum
-      book_number, book_color, short_name, long_name, is_present, sorting_order
+      book_number, book_color, short_name, long_name, is_present
 
-    let books = getInDb(enumToSeq Book, "books_all", $sortingOrder)
+    let books = getInDb(enumToSeq Book, "books_all", $bookNumber)
 
     for b in books:
       if b[ord isPresent] == "0":
@@ -120,6 +123,7 @@ proc addDb(db, docName: string; user = ""; pass = "") =
         of "language": inf.language = val
         of "detailed_info": inf.detailedInfo = val
         of "origin": inf.origin = val
+        of "history_of_changes": inf.changelog = val
         else: discard
 
     inDb: sqlite.insert(dbConn, inf)
