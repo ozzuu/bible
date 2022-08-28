@@ -7,22 +7,17 @@ import bible/db/models/document
 import bible/routeUtils
 
 import bible/views
-import bible/views/[
-  docNotExists,
-  verses
-]
+import bible/views/verses
 
 proc r_verses*(ctx: Context) {.async.} =
   ## Verses
   ctx.forceHttpMethod HttpGet
-  ctx.withParams(mergePath = true):
-    node.ifContains(all = ["doc", "book", "verse"]):
+  ctx.withParams(get = false, path = true):
+    node.ifContains(all = ["doc", "book"]):
       let
         doc = node{"doc"}.getStr
         book = node{"book"}.getStr
         verse = node{"verse"}.getInt
 
-      if doc in getAllDocsName():
-        ctx.render verses(doc, book, @[1,2,3])
-      else:
-        ctx.render docNotExists doc
+      ctx.withDoc doc:
+        ctx.render verses(doc, book, @[1, 2, 3])

@@ -1,4 +1,4 @@
-from std/httpcore import Http404
+from std/httpcore import Http200
 from std/strformat import fmt
 import pkg/karax/[
   karaxdsl,
@@ -8,7 +8,7 @@ import pkg/karax/[
 from bible/views import View
 
 proc versicles*(doc, book: string; verse: int; versicles: openArray[string]): View =
-  result.code = Http404
+  result.code = Http200
   result.name = fmt"{doc} - {book} {verse}"
   result.vnode = buildHtml(tdiv):
     h1:

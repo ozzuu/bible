@@ -2,7 +2,9 @@ import pkg/prologue
 
 import bible/routes/[
   versicles,
-  verses
+  verses,
+  books,
+  documents,
 ]
 
 import bible/routes/default/notFound
@@ -17,6 +19,8 @@ const
     ("", @[
       pattern("/{doc}/{book}/{verse}", r_versicles, HttpGet, "vesicles"),
       pattern("/{doc}/{book}", r_verses, HttpGet, "verses"),
+      pattern("/{doc}", r_books, HttpGet, "books"),
+      pattern("/", r_documents, HttpGet, "documents"),
     ]),
   ]
 

@@ -8,16 +8,15 @@ import pkg/karax/[
 from bible/views import View
 from bible/utils import url
 
-proc verses*(doc, book: string; verses: openArray[int]): View =
+proc documents*(documents: openArray[string]): View =
   result.code = Http200
-  result.name = fmt"{doc} - {book} Verses"
+  result.name = fmt"Documents"
   result.vnode = buildHtml(tdiv):
     h1:
       text result.name
-    tdiv(class = "verses"):
-      for verse in verses:
-        tdiv(class = "verse"):
-          a(href = url fmt"/{doc}/{book}/{verse}"): text $verse
-
+    tdiv(class = "documents"):
+      for document in documents:
+        tdiv(class = "document"):
+          a(href = url fmt"/{document}"): text document
     
     # script(src = "script/home.js") # getJs "home"

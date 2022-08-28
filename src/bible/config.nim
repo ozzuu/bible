@@ -3,6 +3,8 @@ from std/strutils import parseInt
 
 import pkg/prologue
 
+const logicInApi* = false
+
 const
   ifContainsAllErr* = "Please provide $1"
   ifContainsAtLeastErr* = "Please provide at least $1"
@@ -14,10 +16,10 @@ func parseAddress(url: Uri): tuple[hasSsl: bool; host: string; port: int] =
   result.host = url.hostname
   result.port = if url.port.len == 0: 80 else: parseInt url.port
 
-import std/locks
 
-var confLock*: Lock
-initLock confLock
+# import std/locks
+# var confLock*: Lock
+# initLock confLock
 
 # {.push guard: confLock.} # Why push isn't working?
 let

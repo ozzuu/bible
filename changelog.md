@@ -5,7 +5,7 @@
 - Added `Document`s table
 - Added the content fetching in home route
 - Added views (using karax)
-- Added books, verses and versicles routes
+- Added books, verses and versicles routes (dummy data)
 
 ---
 

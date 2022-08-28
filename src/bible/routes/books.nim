@@ -6,19 +6,13 @@ import bible/db/models/document
 import bible/routeUtils
 
 import bible/views
-import bible/views/[
-  docNotExists,
-  home
-]
+import bible/views/books
 
 proc r_books*(ctx: Context) {.async.} =
-  ## Homepage
+  ## List all books
   ctx.forceHttpMethod HttpGet
-  let
-    doc = ctx.getPathParams("doc")
-
-  let docs = getAllDocsName()
-  if doc in docs:
-    ctx.render home(doc, book, verse, @["verse1", "verse2", "verse3"])
-  else:
-    ctx.render docNotExists doc
+  ctx.withParams(get = false, path = true):
+    node.ifContains(all = ["doc"]):
+      let doc = node{"doc"}.getStr
+      ctx.withDoc doc:
+        ctx.render books(doc, @["book1", "book2", "book3"])
