@@ -1,4 +1,4 @@
-# from std/logging import nil
+from std/strformat import fmt
 from std/times import getTime, toUnix
 from std/json import JsonNode, keys, delete
 import bible/config
@@ -15,3 +15,7 @@ proc url*(path: string): string =
     var link = address
     link.path = path
     result = $link
+
+proc assetUrl*(path: string): string =
+  withConf:
+    result = url fmt"/{assetsDir}/{path}"

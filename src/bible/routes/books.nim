@@ -2,7 +2,7 @@ from std/strformat import fmt
 
 import pkg/prologue
 
-import bible/db/models/document
+import bible/db/models/book
 import bible/routeUtils
 
 import bible/views
@@ -15,4 +15,4 @@ proc r_books*(ctx: Context) {.async.} =
     node.ifContains(all = ["doc"]):
       let doc = node{"doc"}.getStr
       ctx.withDoc doc:
-        ctx.render books(doc, @["book1", "book2", "book3"])
+        ctx.render books(doc, doc.getAllBooks)

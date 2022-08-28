@@ -210,14 +210,30 @@ proc getUsing*(
       result = table.get(val, [inDb])
       break
 
-import bible/views/error/docNotExists
+import bible/views/error/[
+  docNotExists,
+  bookNotExists,
+  chapterNotExists,
+]
+from bible/db/models/document import getAllDocsShortNames
 
 template withDoc*(ctx; doc: string; body: untyped): untyped =
   ## Check if the document exists
-  if doc in getAllDocsName():
+  if doc in getAllDocsShortNames():
     body
   else:
     ctx.render docNotExists doc
 
-  
-  
+template withBook*(ctx; book: string; chapters: int; body: untyped): untyped =
+  ## Check if the book exists
+  if chapters > 0:
+    body
+  else:
+    ctx.render bookNotExists book
+
+template withChapter*(ctx; chapter, verses: int; body: untyped): untyped =
+  ## Check if the chapter exists
+  if verses > 0:
+    body
+  else:
+    ctx.render chapterNotExists chapter

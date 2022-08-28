@@ -1,8 +1,11 @@
 import std/logging
 
 import pkg/prologue
-import pkg/prologue/middlewares/utils
-import pkg/prologue/middlewares/signedCookieSession
+import pkg/prologue/middlewares/[
+  utils,
+  signedCookieSession,
+  staticfile
+]
 
 import bible/config
 import bible/routes
@@ -44,10 +47,9 @@ proc serve =
       finally:
         await switch(ctx)
 
-  app.use @[
-    debugRequestMiddleware(),
-    sessionMw()
-  ]
+  app.use debugRequestMiddleware()
+  app.use sessionMw()
+  app.use staticFileMiddleware assetsDir
 
   for r in routesDefinition:
     app.addRoute(r.routes, r.path)
@@ -60,6 +62,7 @@ proc serve =
 import std/db_sqlite
 from std/strutils import join, parseInt
 from std/strformat import fmt
+from std/tables import Table, `[]`, `[]=`, hasKey
 
 import bible/db/models/[
   book,
@@ -68,7 +71,7 @@ import bible/db/models/[
   document
 ]
 
-proc addDb(db, docName: string; user = ""; pass = "") =
+proc addDb(db, docName, fullName: string; user = ""; pass = "") =
   ## Adds `db` to the `documents` db defined at `.env`
   echo fmt"Adding document '{db}' as '{docName}'"
   inDb:
@@ -83,35 +86,20 @@ proc addDb(db, docName: string; user = ""; pass = "") =
       query.add fmt" ORDER BY {orderBy}"
     result = dbSqlite.getAllRows(newDbConn, sql query, table)
     if debugging:
-      if result.len > 10:
-        result = result[0..10]
+      if result.len > 5:
+        result = result[0..5]
   proc enumToSeq(e: type): seq[string] =
     for x in e:
       result.add $x
 
   block addDoc:
     echo "Adding document"
-    var doc = newDocument docName
+    var doc = newDocument(
+      shortName = docName,
+      name = fullName
+    )
     inDb: sqlite.insert(dbConn, doc)
 
-
-  block getBooks:
-    echo "Adding books"
-    type Book = enum
-      book_number, book_color, short_name, long_name, is_present
-
-    let books = getInDb(enumToSeq Book, "books_all", $bookNumber)
-
-    for b in books:
-      if b[ord isPresent] == "0":
-        continue
-      var book = newBook(
-        docName = docName,
-        color = b[ord bookColor],
-        shortName = b[ord shortName],
-        name = b[ord longName]
-      )
-      inDb: sqlite.insert(dbConn, book)
 
   block getInfo:
     echo "Adding info"
@@ -134,22 +122,63 @@ proc addDb(db, docName: string; user = ""; pass = "") =
 
     inDb: sqlite.insert(dbConn, inf)
 
+  var bookChapters: Table[int, seq[int]]
+
   block getVerses:
     echo "Adding verses"
-    type Verse = enum
+    type Chapter = enum
       book_number, chapter, verse, text
 
-    let verses = getInDb(enumToSeq Verse, "verses")
-
+    let verses = getInDb(enumToSeq Chapter, "verses")
+    
     for v in verses:
       var ver = newVerse(
         docName = docName,
-        bookNumber = parseInt v[ord bookNumber],
+        bookShortName = v[ord book_number],
         chapter = parseInt v[ord chapter],
-        verse = parseInt v[ord verse],
+        number = parseInt v[ord verse],
         text = v[ord text]
       )
+      echo ver[]
+      let bookNumber = parseInt v[ord book_number]
+      if bookChapters.hasKey bookNumber:
+        if ver.chapter notin bookChapters[bookNumber]:
+          bookChapters[bookNumber].add ver.chapter
+      else:
+        bookChapters[bookNumber] = @[ver.chapter]
       inDb: sqlite.insert(dbConn, ver)
+
+  block getBooks:
+    echo "Adding books"
+    type Book = enum
+      book_number, book_color, short_name, long_name, is_present
+
+    let books = getInDb(enumToSeq Book, "books_all", $bookNumber)
+
+    for b in books:
+      if b[ord isPresent] == "0":
+        continue
+      var book = newBook(
+        docName = docName,
+        color = b[ord bookColor],
+        shortName = b[ord shortName],
+        name = b[ord longName],
+        verses = 0,
+        number = parseInt b[ord book_number],
+      )
+      echo book[]
+      try:
+        book.verses = bookChapters[book.number].len
+        block updateBookShortNameInVerses:
+          var verses = @[newVerse()]
+          inDb: dbConn.select(verses, "Verse.bookShortName = ?", dbValue book.number)
+          for verse in verses.mitems:
+            verse.bookShortName = book.shortName
+            inDb: dbConn.update verse
+
+        inDb: sqlite.insert(dbConn, book)
+      except KeyError:
+        echo fmt"Skipping book '{book.name}' because it is blank"
 
 when isMainModule:
   import pkg/cligen

@@ -10,6 +10,6 @@ import bible/views
 import bible/views/documents
 
 proc r_documents*(ctx: Context) {.async.} =
-  ## Versicles
+  ## All documents
   ctx.forceHttpMethod HttpGet
-  ctx.render documents(getAllDocsName())
+  ctx.render documents(getAllDocs())

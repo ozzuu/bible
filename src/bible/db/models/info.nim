@@ -1,7 +1,4 @@
-import pkg/norm/[
-  model,
-  pragmas
-]
+import pkg/norm/model
 
 type
   Info* = ref object of Model

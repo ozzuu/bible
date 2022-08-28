@@ -45,6 +45,8 @@ let
   errorLog* = env.getOrDefault("errorLog", "error.log")
   rollingLog* = env.getOrDefault("rollingLog", "rolling.log")
 
+  assetsDir* = env.getOrDefault("assetsDir", "assets")
+
 # {.pop.}
 
 template withConf*(body: untyped) =

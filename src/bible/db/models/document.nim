@@ -8,28 +8,32 @@ from bible/utils import nowUnix
 type
   Document* = ref object of Model
     ## Available documents
-    name*: string ## The name of the document
+    shortName* {.unique.}: string ## The name of the document
+    name*: string
     createdAt*: int64
 
 proc newDocument*(
-  name: string;
+  shortName, name: string;
 ): Document =
   ## Creates new `Document`
   new result
+  result.shortName = shortName
   result.name = name
   result.createdAt = nowUnix()
 
 proc newDocument*: Document =
   ## Creates new blank `Document`
   newDocument(
+    shortName = "",
     name = "",
   )
 
 import bible/db
 
-proc getAllDocsName*: seq[string] =
-  var docs = @[newDocument()]
-  inDb: dbConn.selectAll docs
+proc getAllDocs*: seq[Document] =
+  result = @[newDocument()]
+  inDb: dbConn.selectAll result
 
-  for doc in docs:
-    result.add doc.name
+proc getAllDocsShortNames*: seq[string] =
+  for doc in getAllDocs():
+    result.add doc.shortName

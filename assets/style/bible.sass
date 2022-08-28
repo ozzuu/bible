@@ -1,0 +1,100 @@
+
+body
+  min-height: 100vh
+  // margin: 5vw
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+
+.content
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  margin: 3vw
+  padding: 5vw
+  width: fit-content
+  box-shadow: 0 0 .2em var(--color)
+
+  // Selection
+
+  .documents, .books, .chapters
+    display: flex
+    flex-direction: row
+    padding: 1em
+    justify-content: center
+    flex-wrap: wrap
+
+    .document a, .book a, .chapter a
+      font-size: 1.5em
+      padding: .7em 1.2em
+      margin: .5em
+      background: var(--color)
+      color: var(--color-text)
+      border-radius: var(--border-radius)
+
+  // Reading
+
+  .top
+    position: relative
+    text-align: center
+    top: -4vw
+    color: var(--color-text-secondary)
+    font-size: .8em
+    div
+      font-weight: bold
+      // color: var(--color-text-secondary)
+      font-size: 1.2em
+
+  .title
+    font-size: 1em
+    .reading
+      font-size: 2em
+      
+  .verses
+    font-size: 18px
+    display: flex
+    flex-direction: column
+    
+    .verse
+      transition: .5s
+      margin: 0 .5em
+      padding: .2em
+      width: fit-content
+      border-radius: var(--border-radius)
+      
+      sup
+        background: initial
+        margin: initial
+        padding: initial
+        font-size: initial
+        a
+          color: var(--color-text-secondary)
+
+      sup.strong
+        color: var(--color-secondary)
+        font-size: 0.6em
+        display: var(--strongs)
+      span.explanation
+        color: var(--color)
+        display: var(--explanations)
+
+      &:target
+        background: #44ff0069
+
+
+footer
+  left: 0
+  bottom: 0
+  width: 100%
+  text-align: center
+  padding: 1em
+
+  .contribute
+    margin-bottom: 2em
+
+  .glory
+    margin-top: 1em
+    font-size: 1.1em
+    font-weight: bold

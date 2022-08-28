@@ -3,21 +3,22 @@ from std/strutils import contains
 
 import pkg/prologue
 
-import bible/db/models/document
+import bible/db/models/book
 import bible/routeUtils
 
 import bible/views
-import bible/views/versicles
+import bible/views/chapters
 
-proc r_versicles*(ctx: Context) {.async.} =
-  ## Versicles
+proc r_chapters*(ctx: Context) {.async.} =
+  ## Chapters
   ctx.forceHttpMethod HttpGet
   ctx.withParams(get = false, path = true):
-    node.ifContains(all = ["doc", "book", "verse"]):
+    node.ifContains(all = ["doc", "book"]):
       let
         doc = node{"doc"}.getStr
         book = node{"book"}.getStr
-        verse = node{"verse"}.getInt
 
       ctx.withDoc doc:
-        ctx.render versicles(doc, book, verse, @["verse1", "verse2", "verse3"])
+        let chapters = doc.getChaptersQnt(book)
+        ctx.withBook(book, chapters):
+          ctx.render chapters(doc, book, chapters)

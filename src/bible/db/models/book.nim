@@ -10,9 +10,12 @@ type
     color*: string
     shortName*: string
     name*: string
+    verses*: int
+    number*: int
 
 proc newBook*(
   docName, color, shortName, name: string;
+  verses, number: int
 ): Book =
   ## Creates new `Book`
   new result
@@ -20,6 +23,8 @@ proc newBook*(
   result.color = color
   result.shortName = shortName
   result.name = name
+  result.verses = verses
+  result.number = number
 
 proc newBook*: Book =
   ## Creates new blank `Book`
@@ -27,5 +32,23 @@ proc newBook*: Book =
     docName = "",
     color = "",
     shortName = "",
-    name = ""
+    name = "",
+    verses = 0,
+    number = 0
   )
+
+import bible/db
+
+proc getAllBooks*(doc: string): seq[Book] =
+  result = @[newBook()]
+  try:
+    inDb: dbConn.select(result, "Book.docName = ?", dbValue doc)
+  except: discard
+
+proc getChaptersQnt*(doc, bookShortName: string): int =
+  var book = newBook()
+  try:
+    inDb: dbConn.select(book, "Book.docName = ? and Book.shortName = ?", dbValue doc, dbValue bookShortName)
+  except: discard
+    
+  result = book.verses

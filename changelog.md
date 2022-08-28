@@ -1,11 +1,21 @@
 # Changelog
 
+## Version 1.0.0 (Aug 28, 2022)
+
+- Added documents fetching from DB
+- Added books fetching from DB
+- Added verses fetching from DB
+- Fixed Verse.number saving
+- Added complete document name
+
+---
+
 ## Version 0.3.0 (Aug 28, 2022)
 
 - Added `Document`s table
 - Added the content fetching in home route
 - Added views (using karax)
-- Added books, verses and versicles routes (dummy data)
+- Added books, chapters and verses routes (dummy data)
 
 ---
 

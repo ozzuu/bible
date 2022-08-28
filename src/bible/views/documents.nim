@@ -7,16 +7,19 @@ import pkg/karax/[
 
 from bible/views import View
 from bible/utils import url
+import bible/config
+import bible/db/models/document
 
-proc documents*(documents: openArray[string]): View =
+proc documents*(documents: openArray[Document]): View =
   result.code = Http200
   result.name = fmt"Documents"
-  result.vnode = buildHtml(tdiv):
-    h1:
-      text result.name
-    tdiv(class = "documents"):
-      for document in documents:
-        tdiv(class = "document"):
-          a(href = url fmt"/{document}"): text document
-    
-    # script(src = "script/home.js") # getJs "home"
+  withConf:
+    result.vnode = buildHtml(tdiv):
+      h1:
+        text appName
+      p: text "Documents"
+      tdiv(class = "documents"):
+        for document in documents:
+          tdiv(class = "document"):
+            a(href = url fmt"/{document.shortName}"): text document.name
+      

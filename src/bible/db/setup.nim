@@ -9,7 +9,7 @@ import bible/db/models/[
 
 proc setup*(conn: DbConn) =
   ## Creates all tables
-  conn.createTables newBook()
-  conn.createTables newInfo()
   conn.createTables newVerse()
+  conn.createTables newInfo()
+  conn.createTables newBook()
   conn.createTables newDocument()
