@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.1.0 (Aug 29, 2022)
+
+- Added status to continue where stopped (import)
+
+---
+
 ## Version 1.0.0 (Aug 28, 2022)
 
 - Added documents fetching from DB
