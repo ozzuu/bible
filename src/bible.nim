@@ -76,15 +76,10 @@ import bible/db/models/[
 
 type
   DocStatus = object
-    verse: DocVerseStatus
-    book: DocBookStatus
-    info: bool
-  DocVerseStatus = object
     book: int
     chapter: int
-    number: int
-  DocBookStatus = object
-    number: int
+    verse: int
+    info: bool
   Status = Table[string, DocStatus]
 
 proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
@@ -99,20 +94,27 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
   if not fileExists statusFile:
     statusFile.writeFile($ %*Status())
 
+  var stat: Status
   template inStatus(body: untyped): untyped =
-    block:
-      var stat {.inject.} = statusFile.readFile.parseJson.to Status
-      try:
-        body
-      finally:
-        statusFile.writeFile(pretty %*stat)
+    stat = statusFile.readFile.parseJson.to Status
+    try:
+      body
+    finally:
+      statusFile.writeFile(pretty %*stat)
     
 
-  template getInDb(columns: openArray[string]; table: string; orderBy = ""; body): untyped =
+  template getInDb(
+    columns: openArray[string];
+    table: string;
+    where = "";
+    body
+  ): untyped =
     block:
       var query = "SELECT " & columns.join(", ") & " FROM ?"
-      if orderBy.len > 0:
-        query.add " ORDER BY " & orderBy
+      
+      if where.len > 0:
+        query.add " WHERE " & where
+        
       var i = 0
       for r in dbSqlite.fastRows(newDbConn, sql query, table):
         let row {.inject.} = r
@@ -163,92 +165,109 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
     inDb: sqlite.insert(dbConn, inf)
     inStatus: stat[docName].info = true
 
-  var bookChapters: Table[int, seq[int]]
-  
   block getVerses:
-    echo "Adding verses"
-    type Chapter = enum
-      book_number, chapter, verse, text
+    echo "Adding verses and books"
+    type
+      Verse {.pure.} = enum
+        book_number, chapter, verse, text
+      Book {.pure.} = enum
+        book_number, book_color, short_name, long_name, is_present
 
-    getInDb(enumToSeq Chapter, "verses", ""):
-      block addVerse:
+    getInDb(enumToSeq Verse, "verses", ""):
         try:
           var ver = newVerse(
             docName = docName,
-            bookShortName = row[ord book_number],
-            chapter = parseInt row[ord chapter],
-            number = parseInt row[ord verse],
-            text = row[ord text]
+            bookShortName = "",
+            chapter = parseInt row[ord Verse.chapter],
+            number = parseInt row[ord Verse.verse],
+            text = row[ord Verse.text]
           )
-          let bookNumber = parseInt row[ord book_number]
+          let bookNumber = parseInt row[ord Verse.bookNumber]
 
-          inStatus:
-            if stat[docName].verse.book > bookNumber:
-              break addVerse
-            elif stat[docName].verse.book == bookNumber:
-              if stat[docName].verse.chapter > ver.chapter:
+          
+          block addVerse:
+            inStatus:
+              if stat[docName].book > bookNumber:
                 break addVerse
-              elif stat[docName].verse.chapter == ver.chapter:
-                if stat[docName].verse.number >= ver.number:
+              elif stat[docName].book == bookNumber:
+                if stat[docName].chapter > ver.chapter:
                   break addVerse
+                elif stat[docName].chapter == ver.chapter:
+                  if stat[docName].verse >= ver.number:
+                    break addVerse
 
-          echo ver[]
-          if bookChapters.hasKey bookNumber:
-            if ver.chapter notin bookChapters[bookNumber]:
-              bookChapters[bookNumber].add ver.chapter
-          else:
-            bookChapters[bookNumber] = @[ver.chapter]
-          inDb: sqlite.insert(dbConn, ver)
-          inStatus:
-            stat[docName].verse.book = bookNumber
-            stat[docName].verse.chapter = ver.chapter
-            stat[docName].verse.number = ver.number
+            var book: seq[string]
+            getInDb(enumToSeq Book, "books_all", "book_number = '" & $bookNumber & "'"):
+              if book.len == 0:
+                book = row
+              else:
+                echo "WARNING: Duplicated book: " & $book
+            ver.bookShortName = book[ord shortName]
+
+            if bookNumber > stat[docName].book:
+              var bok = newBook(
+                docName = docName,
+                color = book[ord Book.bookColor],
+                shortName = book[ord Book.shortName],
+                name = book[ord Book.longName],
+                verses = 0,
+                number = parseInt book[ord Book.bookNumber],
+              )
+              inDb: sqlite.insert(dbConn, bok)
+              echo bok[]
+
+
+
+            echo ver[]
+            inDb: sqlite.insert(dbConn, ver)
+
+            inStatus:
+              stat[docName].book = bookNumber
+              stat[docName].chapter = ver.chapter
+              stat[docName].verse = ver.number
+            continue
+          echo fmt"Skipping verse: {ver.chapter}:{ver.number} of book {bookNumber}"
         except ValueError:
           discard
-        continue
-      echo "Skipping verse"
 
-  block getBooks:
-    echo "Adding books"
-    type Book = enum
-      book_number, book_color, short_name, long_name, is_present
+  # block getBooks:
 
 
-    getInDb(enumToSeq Book, "books_all", $bookNumber):
-      if row[ord isPresent] == "0":
-        continue
-      block addBook:
-        try:
-          var book = newBook(
-            docName = docName,
-            color = row[ord bookColor],
-            shortName = row[ord shortName],
-            name = row[ord longName],
-            verses = 0,
-            number = parseInt row[ord book_number],
-          )
-          inStatus:
-            if stat[docName].book.number >= book.number:
-              break addBook
+  #   getInDb(enumToSeq Book, "books_all", $bookNumber):
+  #     if row[ord isPresent] == "0":
+  #       continue
+  #     block addBook:
+  #       try:
+  #         var book = newBook(
+  #           docName = docName,
+  #           color = row[ord bookColor],
+  #           shortName = row[ord shortName],
+  #           name = row[ord longName],
+  #           verses = 0,
+  #           number = parseInt row[ord book_number],
+  #         )
+  #         inStatus:
+  #           if stat[docName].book.number >= book.number:
+  #             break addBook
 
-          try:
-            book.verses = bookChapters[book.number].len
-            block updateBookShortNameInVerses:
-              var verses = @[newVerse()]
-              inDb: dbConn.select(verses, "Verse.bookShortName = ?", dbValue book.number)
-              for verse in verses.mitems:
-                verse.bookShortName = book.shortName
-                inDb: dbConn.update verse
+  #         try:
+  #           book.verses = bookChapters[book.number].len
+  #           block updateBookShortNameInVerses:
+  #             var verses = @[newVerse()]
+  #             inDb: dbConn.select(verses, "Verse.bookShortName = ?", dbValue book.number)
+  #             for verse in verses.mitems:
+  #               verse.bookShortName = book.shortName
+  #               inDb: dbConn.update verse
 
-            inDb: sqlite.insert(dbConn, book)
-            inStatus: stat[docName].book.number = book.number
-            echo book[]
-          except KeyError:
-            echo fmt"Skipping book '{book.name}' because it is blank"
-        except ValueError:
-          discard
-        continue
-      echo "Skipping book"
+  #           inDb: sqlite.insert(dbConn, book)
+  #           inStatus: stat[docName].book.number = book.number
+  #           echo book[]
+  #         except KeyError:
+  #           echo fmt"Skipping book '{book.name}' because it is blank"
+  #       except ValueError:
+  #         discard
+  #       continue
+  #     echo "Skipping book"
 
 when isMainModule:
   import pkg/cligen

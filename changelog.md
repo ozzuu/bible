@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.3.0 (Aug 30, 2022)
+
+- Done `The book adding needs to be inside verse adding`
+
+---
+
 ## Version 1.2.0 (Aug 29, 2022)
 
 - Separated the port from url at env
