@@ -10,12 +10,12 @@ type
     color*: string
     shortName*: string
     name*: string
-    verses*: int
+    chapters*: int
     number*: int
 
 proc newBook*(
   docName, color, shortName, name: string;
-  verses, number: int
+  chapters, number: int
 ): Book =
   ## Creates new `Book`
   new result
@@ -23,7 +23,7 @@ proc newBook*(
   result.color = color
   result.shortName = shortName
   result.name = name
-  result.verses = verses
+  result.chapters = chapters
   result.number = number
 
 proc newBook*: Book =
@@ -33,7 +33,7 @@ proc newBook*: Book =
     color = "",
     shortName = "",
     name = "",
-    verses = 0,
+    chapters = 0,
     number = 0
   )
 
@@ -51,4 +51,4 @@ proc getChaptersQnt*(doc, bookShortName: string): int =
     inDb: dbConn.select(book, "Book.docName = ? and Book.shortName = ?", dbValue doc, dbValue bookShortName)
   except: discard
     
-  result = book.verses
+  result = book.chapters

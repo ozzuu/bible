@@ -1,8 +1,16 @@
 # Changelog
 
+## Version 1.4.0 (Aug 30, 2022)
+
+- Added `update_chapters_quantity` command to update the quantity of chapters
+- Renamed `Book.verses` to correct `Book.chapters`
+
+---
+
 ## Version 1.3.0 (Aug 30, 2022)
 
 - Done `The book adding needs to be inside verse adding`
+- Added what verse/book was added in import
 
 ---
 
