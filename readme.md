@@ -8,6 +8,8 @@ Online MyBible document reader
 - [ ] Use just lowercase book names
 - [ ] Add support to import bibles from other sources
 - [x] Add resume and continue to add command because the DB is too big1
+- [ ] The book adding needs to be inside verse adding
+
 
 ## License
 
