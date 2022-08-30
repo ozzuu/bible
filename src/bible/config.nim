@@ -29,7 +29,7 @@ let
   dbPass* = env.getOrDefault("dbPass", "")
 
   port* = parseInt env.getOrDefault("port", "8080")
-  address* = parseUri(env.getOrDefault("hostname", "http://localhost") & ":" & $port)
+  address* = parseUri env.getOrDefault("hostname", "http://localhost")
   (haveSsl*, host*) = parseAddress address
 
   appName* = env.getOrDefault("appName", "bible")
