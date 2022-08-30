@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.2.0 (Aug 29, 2022)
+
+- Separated the port from url at env
+
+---
+
 ## Version 1.1.0 (Aug 29, 2022)
 
 - Added status to continue where stopped (import)

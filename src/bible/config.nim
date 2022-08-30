@@ -10,11 +10,10 @@ const
   ifContainsAtLeastErr* = "Please provide at least $1"
   ifContainsInvalidReq* = "Invalid request"
 
-func parseAddress(url: Uri): tuple[hasSsl: bool; host: string; port: int] =
-  ## Parses the address into `haveSsl`, `host` and `port`
+func parseAddress(url: Uri): tuple[hasSsl: bool; host: string] =
+  ## Parses the address into `haveSsl`, `host`
   result.hasSsl = url.scheme == "https"
   result.host = url.hostname
-  result.port = if url.port.len == 0: 80 else: parseInt url.port
 
 
 # import std/locks
@@ -29,8 +28,9 @@ let
   dbUser* = env.getOrDefault("dbUser", "")
   dbPass* = env.getOrDefault("dbPass", "")
 
-  address* = parseUri env.getOrDefault("address", "http://localhost:8080")
-  (haveSsl*, host*, port*) = parseAddress address
+  port* = parseInt env.getOrDefault("port", "8080")
+  address* = parseUri(env.getOrDefault("address", "http://localhost") & ":" & $port)
+  (haveSsl*, host*) = parseAddress address
 
   appName* = env.getOrDefault("appName", "bible")
   debugging* = env.getOrDefault("debug", true)
