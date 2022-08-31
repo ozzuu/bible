@@ -21,11 +21,20 @@ proc parseVerse(verse: string): string =
     "</S>": "</sup>",
   })
 
-proc verses*(doc, book: string; chapter: int; verses: openArray[Verse]): View =
+proc verses*(
+  doc, book: string;
+  chaptersQnt, chapter: int;
+  verses: openArray[Verse];
+): View =
   result.code = Http200
   result.name = fmt"{doc} - {book} {chapter}"
   withConf:
     result.vnode = buildHtml(tdiv):
+      tdiv(class = "controls"):
+        if chapter > 1:
+          a(href = url fmt"/{doc}/{book}/{chapter - 1}", class = "previous")
+        if chapter < chaptersQnt:
+          a(href = url fmt"/{doc}/{book}/{chapter + 1}", class = "next")
       tdiv(class = "top"):
         tdiv: text appName
         text fmt"{doc} - {book} {chapter}"

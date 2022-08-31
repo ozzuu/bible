@@ -1,6 +1,12 @@
 # Changelog
 
-## Version 1.5.0 (Aug 30, 2022)
+## Version 1.6.0 (Aug 31, 2022)
+
+- Added buttons to go back and forward
+
+---
+
+## Version 1.5.0 (Aug 31, 2022)
 
 - Added `example.env`
 - Fixed accent books
