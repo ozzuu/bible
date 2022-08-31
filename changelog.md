@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.5.0 (Aug 30, 2022)
+
+- Added `example.env`
+- Fixed accent books
+
+---
+
 ## Version 1.4.0 (Aug 30, 2022)
 
 - Added `update_chapters_quantity` command to update the quantity of chapters
