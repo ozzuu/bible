@@ -6,7 +6,8 @@ from pkg/util/forStr import tryParseInt
 
 import bible/db/models/[
   verse,
-  book
+  book,
+  access
 ]
 import bible/routeUtils
 
@@ -16,8 +17,8 @@ import bible/views/verses
 proc `$`(a: Verse): string =
   $a[]
 
-proc r_verse*(ctx: Context) {.async.} =
-  ## Verse
+proc r_verses*(ctx: Context) {.async.} =
+  ## Verses
   ctx.forceHttpMethod HttpGet
   ctx.withParams(get = false, path = true):
     node.ifContains(all = ["doc", "book", "chapter"]):
@@ -31,4 +32,7 @@ proc r_verse*(ctx: Context) {.async.} =
         ctx.withBook(book, chapters):
           let bookVerses = doc.getAllBookVerses(book, chapter)
           ctx.withChapter(chapter, bookVerses.len):
-            ctx.render verses(doc, book, chapters, chapter, bookVerses)
+            ctx.render(
+              getAccess(doc, book, chapter).accesses,
+              verses(doc, book, chapters, chapter, bookVerses)
+            )

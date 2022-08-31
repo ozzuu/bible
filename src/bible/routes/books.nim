@@ -2,7 +2,10 @@ from std/strformat import fmt
 
 import pkg/prologue
 
-import bible/db/models/book
+import bible/db/models/[
+  book,
+  access
+]
 import bible/routeUtils
 
 import bible/views
@@ -15,4 +18,7 @@ proc r_books*(ctx: Context) {.async.} =
     node.ifContains(all = ["doc"]):
       let doc = node{"doc"}.getStr
       ctx.withDoc doc:
-        ctx.render books(doc, doc.getAllBooks)
+        ctx.render(
+          getAccess(doc, "", 0).accesses,
+          books(doc, doc.getAllBooks)
+        )

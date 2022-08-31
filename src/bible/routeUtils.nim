@@ -19,7 +19,6 @@ export utils
 import pkg/prologue
 export json
 
-
 proc hasKey*(session: var Session; key: string): bool =
   ## Check if session have specific session
   try:
@@ -223,18 +222,18 @@ template withDoc*(ctx; doc: string; body: untyped): untyped =
   if doc in getAllDocsShortNames():
     body
   else:
-    ctx.render docNotExists doc
+    ctx.render(0, docNotExists doc)
 
 template withBook*(ctx; book: string; chapters: int; body: untyped): untyped =
   ## Check if the book exists
   if chapters > 0:
     body
   else:
-    ctx.render bookNotExists book
+    ctx.render(0, bookNotExists book)
 
 template withChapter*(ctx; chapter, verses: int; body: untyped): untyped =
   ## Check if the chapter exists
   if verses > 0:
     body
   else:
-    ctx.render chapterNotExists chapter
+    ctx.render(0, chapterNotExists chapter)

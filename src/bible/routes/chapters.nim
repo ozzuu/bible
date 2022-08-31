@@ -3,7 +3,10 @@ from std/strutils import contains
 
 import pkg/prologue
 
-import bible/db/models/book
+import bible/db/models/[
+  book,
+  access
+]
 import bible/routeUtils
 
 import bible/views
@@ -18,11 +21,10 @@ proc r_chapters*(ctx: Context) {.async.} =
         doc = node{"doc"}.getStr
         book = node{"book"}.getStr
 
-      echo "\l\l"
-      echo book
-      echo "\l\l"
-
       ctx.withDoc doc:
         let chapters = doc.getChaptersQnt(book)
         ctx.withBook(book, chapters):
-          ctx.render chapters(doc, book, chapters)
+          ctx.render(
+            getAccess(doc, book, 0).accesses,
+            chapters(doc, book, chapters)
+          )

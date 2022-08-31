@@ -67,4 +67,4 @@ proc verses*(
             sup: a(href = fmt"#{verse.number}"): text $verse.number
             span: verbatim verse.text.parseVerse
       
-      script(src = assetUrl "script/verse.js") # getJs "home"
+      script(src = assetUrl "script/verse.js")

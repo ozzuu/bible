@@ -4,12 +4,14 @@ import bible/db/models/[
   book,
   info,
   verse,
-  document
+  document,
+  access
 ]
 
 proc setup*(conn: DbConn) =
   ## Creates all tables
-  conn.createTables newVerse()
+  conn.createTables newDocument()
   conn.createTables newInfo()
   conn.createTables newBook()
-  conn.createTables newDocument()
+  conn.createTables newVerse()
+  conn.createTables newAccess()

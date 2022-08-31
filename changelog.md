@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.7.0 (Aug 31, 2022)
+
+- Fixed verse number link not clickable
+- Added page access counting
+
+---
+
 ## Version 1.6.1 (Aug 31, 2022)
 
 - Fixed verses punctuation
