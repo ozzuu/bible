@@ -9,6 +9,7 @@ Online MyBible document reader
 - [ ] Add support to import bibles from other sources
 - [x] Add resume and continue to add command because the DB is too big1
 - [x] The book adding needs to be inside verse adding
+- [ ] Add document info at doc selection
 
 
 ## License
