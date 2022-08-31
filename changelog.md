@@ -3,6 +3,7 @@
 ## Version 1.6.0 (Aug 31, 2022)
 
 - Added buttons to go back and forward
+  - Fixed buttons position
 
 ---
 

@@ -1,4 +1,5 @@
-bui.env
+build
+.env
 *.log
 db/all.db
 db/status.json

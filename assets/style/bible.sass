@@ -72,6 +72,7 @@ body
         margin: initial
         padding: initial
         font-size: initial
+        z-index: -1
         a
           color: var(--color-text-secondary)
 
@@ -95,9 +96,12 @@ body
     justify-content: space-between
     pointer-events: none
     align-items: center
-    top: 0
+    top: 2em
     left: 0
-    padding: 2em
+    padding: 1em
+
+    @media screen and (max-width: 1200px)
+      height: 0
 
     a
       pointer-events: all !important
@@ -109,7 +113,7 @@ body
       position: relative
       &::before
         position: absolute
-        top: 48%
+        top: 47%
         left: 50%
         transform: translate(-50%, -50%)
         color: var(--color-text-secondary)
