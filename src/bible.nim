@@ -166,6 +166,7 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
     inStatus: stat[docName].info = true
 
   block getVerses:
+    var booksAllTable = true
     echo "Adding verses and books"
     type
       Verse {.pure.} = enum
@@ -196,11 +197,27 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
                   break addVerse
 
           var book: seq[string]
-          getInDb(enumToSeq Book, "books_all", "book_number = '" & $bookNumber & "'"):
-            if book.len == 0:
-              book = row
-            else:
-              echo "WARNING: Duplicated book: " & $book
+          try:
+            if not booksAllTable:
+              raise newException(DbError, "")
+            getInDb(enumToSeq Book, "books_all", "book_number = '" & $bookNumber & "'"):
+              if book.len == 0:
+                book = row
+              else:
+                echo "WARNING: Duplicated book: " & $book
+          except DbError:
+            if booksAllTable:
+              echo "Table 'books_all' doesn't exists"
+              booksAllTable = false
+            var columns = enumToSeq Book
+            discard pop columns
+            getInDb(columns, "books", "book_number = '" & $bookNumber & "'"):
+              if book.len == 0:
+                book = row
+                book.add "1"
+              else:
+                echo "WARNING: Duplicated book: " & $book
+
           ver.bookShortName = book[ord shortName]
 
           if bookNumber > stat[docName].book:

@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.7.0"
+version       = "1.8.0"
 author        = "Thiago Navarro"
 description   = "Ozzuu Bible"
 license       = "MIT"

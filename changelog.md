@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.8.0 (Sep 1, 2022)
+
+- Added support to adding bibles that doesn't have the `books_all` table
+- Fixed some echo messages in import tools
+
+---
+
 ## Version 1.7.0 (Aug 31, 2022)
 
 - Fixed verse number link not clickable
