@@ -3,3 +3,5 @@ build/
 *.log
 db/all.db
 db/status.json
+error.log
+rolling.*

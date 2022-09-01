@@ -215,7 +215,7 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
             inDb: sqlite.insert(dbConn, bok)
             echo fmt"Added book: {bok.name}"
 
-          echo fmt"Added verse: {ver.chapter}:{ver.number} of book {bookNumber}"
+          echo fmt"Added verse: {ver.bookShortName} {ver.chapter}:{ver.number}"
           inDb: sqlite.insert(dbConn, ver)
 
           inStatus:
@@ -223,10 +223,10 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
             stat[docName].chapter = ver.chapter
             stat[docName].verse = ver.number
           continue
-        echo fmt"Skipping verse: {ver.chapter}:{ver.number} of book {bookNumber}"
+        echo fmt"Skipping verse: {ver.chapter}:{ver.number} of book number {bookNumber}"
       except ValueError:
         discard
-  echo "Done, now run `bible update_chapters_quantity`"
+  echo fmt"Done, now run `bible update_chapters_quantity -d '{docName}'`"
 
 proc updateChaptersQuantity(docName: string) =
   ## Updates the quantity of chapters of each book
@@ -246,6 +246,52 @@ proc updateChaptersQuantity(docName: string) =
     book.chapters = versesQnt
     inDb: dbConn.update book
 
+proc renameDocName(oldDocName, docName, fullDocName: string) =
+  ## Updates the quantity of chapters of each book
+  ## 
+  ## Provide the short document name
+  inDb:
+    dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
+
+  echo fmt"Renaming document from '{oldDocName}' to '{fullDocName}' ({docName})"
+
+  block renameDocument:
+    try:
+      var document = newDocument()
+      inDb: dbConn.select(document, "Document.shortName = ?", dbValue oldDocName)
+      echo fmt"Renaming document from '{document.name}' ({document.shortName}) to '{fullDocName}' ({docName})"
+      document.name = fullDocName
+      document.shortName = docName
+      inDb: dbConn.update document
+    except:
+      echo fmt"Already renamed document"
+
+
+  block renameBooks:
+    var books = @[newBook()]
+    inDb: dbConn.select(books, "Book.docName = ?", dbValue oldDocName)
+    if books.len == 0:
+      echo "No books to rename"
+    for book in books.mitems:
+      if book.docName != docName:
+        echo fmt"Renaming docName of book '{book.name}' from '{book.docName}' to '{docName}'"
+        book.docName = docName
+        inDb: dbConn.update book
+      else:
+        echo fmt"The book '{book.name}' already have the '{docName}'"
+      
+  block renameVerses:
+    var verses = @[newVerse()]
+    inDb: dbConn.select(verses, "Verse.docName = ?", dbValue oldDocName)
+    for verse in verses.mitems:
+      if verse.docName != docName:
+        echo fmt"Renaming docName of verse '{verse.bookShortName} {verse.chapter}:{verse.number}' from '{verse.docName}' to '{docName}'"
+        verse.docName = docName
+        inDb: dbConn.update verse
+      else:
+        echo fmt"The verse '{verse.bookShortName} {verse.chapter}:{verse.number}' already have the '{docName}'"
+      
+
 when isMainModule:
   import pkg/cligen
   dispatchMulti([
@@ -255,6 +301,8 @@ when isMainModule:
     short = {"docName": 'n'}
   ],[
     updateChaptersQuantity
+  ],[
+    renameDocName
   ])
 else:
   {.fatal: "This app cannot be imported.".}
