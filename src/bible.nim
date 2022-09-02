@@ -107,6 +107,7 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
     columns: openArray[string];
     table: string;
     where = "";
+    orderBy = "";
     body
   ): untyped =
     block:
@@ -114,6 +115,9 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
 
       if where.len > 0:
         query.add " WHERE " & where
+      if orderBy.len > 0:
+        query.add " ORDER BY " & orderBy
+
 
       var i = 0
       for r in dbSqlite.fastRows(newDbConn, sql query, table):
@@ -124,7 +128,6 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
           body
         finally:
           inc i
-
 
   proc enumToSeq(e: type): seq[string] =
     for x in e:
@@ -152,7 +155,7 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
 
     var inf = newInfo()
     inf.docName = docName
-    getInDb(enumToSeq Info, "info", ""):
+    getInDb(enumToSeq Info, "info", "", ""):
       let val = row[ord value]
       case row[ord name]:
         of "description": inf.description = val
@@ -174,7 +177,7 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
       Book {.pure.} = enum
         book_number, book_color, short_name, long_name, is_present
 
-    getInDb(enumToSeq Verse, "verses", ""):
+    getInDb(enumToSeq Verse, "verses", "", "book_number"):
       try:
         var ver = newVerse(
           docName = docName,
@@ -200,7 +203,7 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
           try:
             if not booksAllTable:
               raise newException(DbError, "")
-            getInDb(enumToSeq Book, "books_all", "book_number = '" & $bookNumber & "'"):
+            getInDb(enumToSeq Book, "books_all", "book_number = '" & $bookNumber & "'", ""):
               if book.len == 0:
                 book = row
               else:
@@ -211,7 +214,7 @@ proc addDb(db, docName, fullName, statusFile: string; user = ""; pass = "") =
               booksAllTable = false
             var columns = enumToSeq Book
             discard pop columns
-            getInDb(columns, "books", "book_number = '" & $bookNumber & "'"):
+            getInDb(columns, "books", "book_number = '" & $bookNumber & "'", ""):
               if book.len == 0:
                 book = row
                 book.add "1"
@@ -283,7 +286,6 @@ proc renameDocName(oldDocName, docName, fullDocName: string) =
     except:
       echo fmt"Already renamed document"
 
-
   block renameBooks:
     var books = @[newBook()]
     inDb: dbConn.select(books, "Book.docName = ?", dbValue oldDocName)
@@ -300,6 +302,8 @@ proc renameDocName(oldDocName, docName, fullDocName: string) =
   block renameVerses:
     var verses = @[newVerse()]
     inDb: dbConn.select(verses, "Verse.docName = ?", dbValue oldDocName)
+    if verses.len == 0:
+      echo "No verse to delete"
     for verse in verses.mitems:
       if verse.docName != docName:
         echo fmt"Renaming docName of verse '{verse.bookShortName} {verse.chapter}:{verse.number}' from '{verse.docName}' to '{docName}'"
@@ -307,6 +311,42 @@ proc renameDocName(oldDocName, docName, fullDocName: string) =
         inDb: dbConn.update verse
       else:
         echo fmt"The verse '{verse.bookShortName} {verse.chapter}:{verse.number}' already have the '{docName}'"
+
+proc deleteDoc(docName: string) =
+  ## Deletes the document
+  ## 
+  ## Provide the short document name
+  inDb:
+    dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
+
+  echo fmt"Deleting '{docName}'"
+
+  block renameDocument:
+    try:
+      var document = newDocument()
+      inDb: dbConn.select(document, "Document.shortName = ?", dbValue docName)
+      echo fmt"Deleting '{docName}' document"
+      inDb: dbConn.delete document
+    except:
+      echo fmt"Already deleted document"
+
+  block renameBooks:
+    var books = @[newBook()]
+    inDb: dbConn.select(books, "Book.docName = ?", dbValue docName)
+    if books.len == 0:
+      echo "No books to delete"
+    for book in books.mitems:
+      echo fmt"Deleting book '{book.name}'"
+      inDb: dbConn.delete book
+      
+  block renameVerses:
+    var verses = @[newVerse()]
+    inDb: dbConn.select(verses, "Verse.docName = ?", dbValue docName)
+    if verses.len == 0:
+      echo "No verse to delete"
+    for verse in verses.mitems:
+      echo fmt"Deleting verse '{verse.bookShortName} {verse.chapter}:{verse.number}'"
+      inDb: dbConn.delete verse
       
 
 when isMainModule:
@@ -320,6 +360,8 @@ when isMainModule:
     updateChaptersQuantity
   ],[
     renameDocName
+  ],[
+    deleteDoc
   ])
 else:
   {.fatal: "This app cannot be imported.".}

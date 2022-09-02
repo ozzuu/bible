@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.9.0 (Sep 2, 2022)
+
+- Added function to `deleteDoc`ument
+
+---
+
 ## Version 1.8.0 (Sep 1, 2022)
 
 - Added support to adding bibles that doesn't have the `books_all` table
