@@ -55,7 +55,7 @@ proc verses*(
             span: verbatim verse.text.parseVerse
             tdiv(class = "tools"):
               a(
-                href = fmt"/compare/{book}/{chapter}/{verse.number}",
+                href = fmt"/compare/{book}/{chapter}/{verse.number}#{doc}",
                 class = "compare",
                 title = "Compare"
               )
