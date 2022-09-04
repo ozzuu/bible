@@ -19,10 +19,11 @@ proc books*(doc: string; books: openArray[Book]): View =
         tdiv: text appName
         text fmt"{doc}"
       tdiv(class = "title"):
-        a(class = "home", href = url fmt"/"): text "Home"
+        a(class = "home", href = url fmt"/"): text appName
         tdiv(class = "reading"):
           span(class = "current"): text doc
       tdiv(class = "books"):
         for book in books:
           tdiv(class = "book"):
-            a(href = url fmt"/{doc}/{book.shortName}"): text book.name
+            a(href = url fmt"/{doc}/{book.shortName}"):
+              text book.name

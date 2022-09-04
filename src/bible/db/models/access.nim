@@ -10,19 +10,20 @@ type
     docName*: string
     bookShortName*: string
     chapter*: int
+    verse*: int
     time*: int64
     accesses*: int
-    
 
 proc newAccess*(
   docName, bookShortName: string;
-  chapter, accesses: int;
+  chapter, verse, accesses: int;
 ): Access =
   ## Creates new `Access`
   new result
   result.docName = docName
   result.bookShortName = bookShortName
   result.chapter = chapter
+  result.verse = verse
   result.time = nowUnix()
   result.accesses = accesses
 
@@ -32,27 +33,29 @@ proc newAccess*: Access =
     docName = "",
     bookShortName = "",
     chapter = 0,
+    verse = 0,
     accesses = 0
   )
 
 import bible/db
 
-proc getAccess*(docName, bookShortName: string; chapter: int): Access =
+proc getAccess*(docName, bookShortName: string; chapter: int; verse = 0): Access =
   ## Get the accesses for the page
   result = newAccess()
   try:
     inDb: dbConn.select(
       result,
-      "Access.docName = ? and Access.bookShortName = ? and Access.chapter = ?",
-      dbValue docName, dbValue bookShortName, dbValue chapter
+      "Access.docName = ? and Access.bookShortName = ? and Access.chapter = ? and Access.verse = ?",
+      dbValue docName, dbValue bookShortName, dbValue chapter, dbValue verse
     )
   except: discard
 
-proc incAccess*(docName, bookShortName: string; chapter: int) =
+proc incAccess*(docName, bookShortName: string; chapter: int; verse = 0) =
   ## Increment the accesses for the page
-  var access = getAccess(docName, bookShortName, chapter)
+  var access = getAccess(docName, bookShortName, chapter, verse)
+  echo docName, bookShortName, chapter, verse
   if access.accesses == 0:
-    access = newAccess(docName, bookShortName, chapter, 1)
+    access = newAccess(docName, bookShortName, chapter, verse, 1)
     inDb: dbConn.insert access
   else:
     if fromUnix(access.time) + 1.months < now().toTime:

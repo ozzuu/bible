@@ -1,6 +1,5 @@
 from std/httpcore import Http200
 from std/strformat import fmt
-from std/strutils import multiReplace
 import pkg/karax/[
   karaxdsl,
   vdom
@@ -9,20 +8,8 @@ import pkg/karax/[
 import bible/db/models/verse
 from bible/views import View
 from bible/utils import url, assetUrl
+import bible/viewUtils
 import bible/config
-
-proc parseVerse(verse: string): string =
-  ## Parse the verse fixing XML tags
-  verse.multiReplace({
-    "<pb/>": "",
-    " <n>": "<n> ",
-    " <S>": "<S> ",
-  }).multiReplace({
-    "<n>": "<span class=\"explanation\">",
-    "</n>": "</span>",
-    "<S>": "<sup class=\"strong\">",
-    "</S>": "</sup>",
-  })
 
 proc verses*(
   doc, book: string;
@@ -44,7 +31,7 @@ proc verses*(
         span(class = "current-verse")
 
       tdiv(class = "title"):
-        a(class = "home", href = url fmt"/"): text "Home"
+        a(class = "home", href = url fmt"/"): text appName
         text " - "
         a(class = "document", href = url fmt"/{doc}"): text doc
         tdiv(class = "reading"):
@@ -66,5 +53,11 @@ proc verses*(
           tdiv(class = "verse", id = $verse.number):
             sup: a(href = fmt"#{verse.number}"): text $verse.number
             span: verbatim verse.text.parseVerse
+            tdiv(class = "tools"):
+              a(
+                href = fmt"/compare/{book}/{chapter}/{verse.number}",
+                class = "compare",
+                title = "Compare"
+              )
       
       script(src = assetUrl "script/verse.js")

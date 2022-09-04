@@ -25,6 +25,7 @@ proc render*(ctx: Context; accesses: int; view: View) =
         meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
         title: text fmt"{view.name} - {appName}"
         link(rel = "stylesheet", href = assetUrl "style/third/mvp.min.css")
+        link(rel = "stylesheet", href = assetUrl "style/third/fontawesome.min.css")
         link(rel = "stylesheet", href = assetUrl "style/bible.css")
       body:
         tdiv(class = "content"):

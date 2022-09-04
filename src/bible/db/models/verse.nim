@@ -50,4 +50,26 @@ proc getAllBookVerses*(doc, bookShortName: string; chapter: int): seq[Verse] =
   if result[0].text.len == 0:
     discard pop result
 
+proc getBookVerse*(doc, bookShortName: string; chapter, verse: int): Verse =
+  result = newVerse()
+  try:
+    inDb: dbConn.select(
+      result,
+      "Verse.docName = ? and Verse.bookShortName = ? and Verse.chapter = ? and Verse.number = ?",
+      dbValue doc, dbValue bookShortName, dbValue chapter, dbValue verse
+    )
+  except: discard
+
+proc getVersesQnt*(doc, bookShortName: string; chapter: int): int64 =
+  result = 0
+  try:
+    inDb:
+      result = dbConn.count(
+        Verse,
+        "number",
+        dist = true,
+        cond = "Verse.docName = ? and Verse.bookShortName = ? and Verse.chapter = ?",
+        dbValue doc, dbValue bookShortName, dbValue chapter
+      )
+  except: discard
 # todo: change book id from booknum to book short name

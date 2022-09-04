@@ -18,7 +18,7 @@ proc chapters*(doc, book: string; chapters: int): View =
         tdiv: text appName
         text fmt"{doc} - {book}"
       tdiv(class = "title"):
-        a(class = "home", href = url fmt"/"): text "Home"
+        a(class = "home", href = url fmt"/"): text appName
         text " - "
         a(class = "document", href = url fmt"/{doc}"): text doc
         tdiv(class = "reading"):

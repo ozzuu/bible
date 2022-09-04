@@ -9,8 +9,8 @@ Online MyBible document reader
 - [ ] Add document info at doc selection
 - [ ] The go back/next verse needs to change book too
 - [ ] If is there just the go to next chapter button, move it to right
-- [ ] Add a command to clean access count DB
-
+- [x] Add a command to clean access count DB
+- [ ] Merge Info table with Document table
 
 ## License
 

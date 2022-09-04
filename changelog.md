@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.0.0 (Sep 4, 2022)
+
+- Added comparison page
+- Added buttons to compare verse
+- Added a function to clean access log
+
+---
+
 ## Version 1.9.0 (Sep 2, 2022)
 
 - Added function to `deleteDoc`ument

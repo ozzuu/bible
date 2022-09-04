@@ -214,6 +214,7 @@ import bible/views/error/[
   docNotExists,
   bookNotExists,
   chapterNotExists,
+  verseNotExists,
 ]
 from bible/db/models/document import getAllDocsShortNames
 
@@ -237,3 +238,10 @@ template withChapter*(ctx; chapter, verses: int; body: untyped): untyped =
     body
   else:
     ctx.render(0, chapterNotExists chapter)
+
+template withVerse*(ctx; doc: string; chapter, verseTextLen: int; body: untyped): untyped =
+  ## Check if the verse exists
+  if verseTextLen > 0:
+    body
+  else:
+    ctx.render(0, verseNotExists(doc, chapter, verse))

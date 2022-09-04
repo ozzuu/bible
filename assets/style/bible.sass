@@ -23,7 +23,6 @@ body
 
   footer div.accesses
     padding-top: 1em
-    
 
   // Selection
 
@@ -90,6 +89,24 @@ body
 
       &:target
         background: #44ff0069
+      
+      .tools
+        display: flex
+        flex-direction: row
+        display: inline-block
+        opacity: 0
+        transition: .1s
+        
+        .compare
+          display: inline-block
+
+          &::before
+            font-family: "Font Awesome 6 Free"
+            content: "\e13a"
+            font-weight: 900
+      
+      &:hover .tools
+          opacity: 1
 
   .controls
     position: fixed
@@ -126,6 +143,20 @@ body
         content: "←"
       &.next::before
         content: "→"
+
+  // Compare
+
+  .verses
+    .version
+      margin: .5em 0
+      padding: 1em 0
+      border-bottom: .3em solid var(--color-shadow)
+
+      &:nth-last-child(1)
+        border-bottom: 0
+      
+      .title
+        font-size: 1.5em
 
 // All
 

@@ -347,7 +347,16 @@ proc deleteDoc(docName: string) =
     for verse in verses.mitems:
       echo fmt"Deleting verse '{verse.bookShortName} {verse.chapter}:{verse.number}'"
       inDb: dbConn.delete verse
-      
+
+proc deleteAccessTable =
+  ## Deletes the access table
+  inDb: dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
+  echo fmt"Deleting access table"
+  inDb: sqlite.exec(
+    dbConn,
+    sql"DROP TABLE Access"
+  )
+  echo fmt"Success"
 
 when isMainModule:
   import pkg/cligen
@@ -362,6 +371,8 @@ when isMainModule:
     renameDocName
   ],[
     deleteDoc
+  ],[
+    deleteAccessTable
   ])
 else:
   {.fatal: "This app cannot be imported.".}
