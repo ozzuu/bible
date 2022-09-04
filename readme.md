@@ -11,6 +11,7 @@ Online MyBible document reader
 - [ ] If is there just the go to next chapter button, move it to right
 - [x] Add a command to clean access count DB
 - [ ] Merge Info table with Document table
+- [ ] Show full book name at title
 
 ## License
 
