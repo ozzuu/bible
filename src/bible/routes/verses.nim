@@ -14,9 +14,6 @@ import bible/routeUtils
 import bible/views
 import bible/views/verses
 
-proc `$`(a: Verse): string =
-  $a[]
-
 proc r_verses*(ctx: Context) {.async.} =
   ## Verses
   ctx.forceHttpMethod HttpGet
@@ -30,7 +27,7 @@ proc r_verses*(ctx: Context) {.async.} =
       ctx.withDoc doc:
         let chapters = doc.getChaptersQnt(book)
         ctx.withBook(book, chapters):
-          let bookVerses = doc.getAllBookVerses(book, chapter)
+          let bookVerses = doc.getAllChapterVerses(book, chapter)
           ctx.withChapter(chapter, bookVerses.len):
             ctx.render(
               getAccess(doc, book, chapter).accesses,

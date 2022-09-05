@@ -12,6 +12,7 @@ Online MyBible document reader
 - [x] Add a command to clean access count DB
 - [ ] Merge Info table with Document table
 - [ ] Show full book name at title
+- [ ] Fix search highlight by replacing with a case insensitive function
 
 ## License
 

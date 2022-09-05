@@ -10,6 +10,8 @@ const
   ifContainsAtLeastErr* = "Please provide at least $1"
   ifContainsInvalidReq* = "Invalid request"
 
+const itemsPerPage* = 10
+
 func parseAddress(url: Uri): tuple[hasSsl: bool] =
   ## Parses the address into `haveSsl`, `host`
   result.hasSsl = url.scheme == "https"

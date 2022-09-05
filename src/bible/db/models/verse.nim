@@ -12,7 +12,6 @@ type
     number*: int
     text*: string
 
-
 proc newVerse*(
   docName, bookShortName: string;
   chapter, number: int;
@@ -38,7 +37,8 @@ proc newVerse*: Verse =
 
 import bible/db
 
-proc getAllBookVerses*(doc, bookShortName: string; chapter: int): seq[Verse] =
+proc getAllChapterVerses*(doc, bookShortName: string; chapter: int): seq[Verse] =
+  ## Get all the chapter verses of same book and document
   result = @[newVerse()]
   try:
     inDb: dbConn.select(
@@ -51,6 +51,7 @@ proc getAllBookVerses*(doc, bookShortName: string; chapter: int): seq[Verse] =
     discard pop result
 
 proc getBookVerse*(doc, bookShortName: string; chapter, verse: int): Verse =
+  ## Get the verse
   result = newVerse()
   try:
     inDb: dbConn.select(
@@ -61,6 +62,7 @@ proc getBookVerse*(doc, bookShortName: string; chapter, verse: int): Verse =
   except: discard
 
 proc getVersesQnt*(doc, bookShortName: string; chapter: int): int64 =
+  ## Returns the quantity of verses in a chapter
   result = 0
   try:
     inDb:
@@ -73,3 +75,26 @@ proc getVersesQnt*(doc, bookShortName: string; chapter: int): int64 =
       )
   except: discard
 # todo: change book id from booknum to book short name
+
+from std/strformat import fmt
+from bible/config import itemsPerPage
+
+proc search*(doc, query: string; page: int): tuple[results: seq[Verse]; matched: int64] =
+  ## Searches all verses that have the `query` in same document
+  result.results = @[newVerse()]
+  result.matched = 0
+  try:
+    inDb:
+      result.matched = dbConn.count(
+        Verse,
+        "number",
+        dist = false,
+        cond = "Verse.docName = ? and Verse.text like ?",
+        dbValue doc, dbValue fmt"%{query}%"
+      )
+      dbConn.select(
+        result.results,
+        fmt"Verse.docName = ? and Verse.text like ? LIMIT {itemsPerPage} OFFSET {(page - 1) * itemsPerPage}",
+        dbValue doc, dbValue fmt"%{query}%"
+      )
+  except: discard

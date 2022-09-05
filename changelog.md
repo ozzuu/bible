@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.1.0 (Sep 5, 2022)
+
+- Show document/book selection in each line
+- Added search with pagination
+- Added search field to books selection page
+
+---
+
 ## Version 2.0.0 (Sep 4, 2022)
 
 - Added comparison page

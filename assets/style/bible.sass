@@ -40,7 +40,32 @@ body
       background: var(--color)
       color: var(--color-text)
       border-radius: var(--border-radius)
+  .documents, .books
+    flex-direction: column
+    flex-wrap: nowrap
 
+  .search
+    display: flex
+    flex-direction: row
+    justify-content: center
+    
+    #search, #submit_search
+      padding: .5em
+      margin: 0
+      background: var(--color-bg-secondary)
+      border: none
+      color: var(--color-text)
+
+    #search
+      border-radius: .5em 0 0 .5em
+
+    #submit_search
+      padding: .5em 1em
+      border-radius: 0 .5em .5em 0
+      &::before
+        font-family: "Font Awesome 6 Free"
+        content: "\f002"
+        font-weight: 900
   // Reading
 
   .top
@@ -144,10 +169,10 @@ body
       &.next::before
         content: "→"
 
-  // Compare
+  // Compare and search
 
   .verses
-    .version
+    .version, .result
       margin: .5em 0
       padding: 1em 0
       border-bottom: .3em solid var(--color-shadow)
@@ -157,6 +182,39 @@ body
       
       .title
         font-size: 1.5em
+      .verse
+        b
+          background: var(--color)
+  // search
+  .pages_container
+    .pages
+      display: flex
+      flex-direction: row
+      margin: auto 0
+      justify-content: center
+
+      .page
+        padding: .5em
+        margin: .5em
+        background: var(--color-bg-secondary)
+        color: var(--color)
+        border-radius: .5em
+        height: 2.5em
+        width: 2.5em
+        text-align: center
+
+        &.current
+          background: var(--color)
+          color: var(--color-text)
+
+        &.last, &.first
+          &::before
+            font-family: "Font Awesome 6 Free"
+            font-weight: 900
+          &.last::before
+            content: "\f101"
+          &.first::before
+            content: "\f100"
 
 // All
 

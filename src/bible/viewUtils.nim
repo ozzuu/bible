@@ -1,4 +1,5 @@
-from std/strutils import multiReplace, join
+from std/strformat import fmt
+from std/strutils import multiReplace, replace
 
 proc parseVerse*(verse: string): string =
   ## Parse the verse fixing XML tags
@@ -12,3 +13,7 @@ proc parseVerse*(verse: string): string =
     "<S>": "<sup class=\"strong\">",
     "</S>": "</sup>",
   })
+
+func highlight*(str, text: string): string =
+  ## Highlight the `str` by making the `text` bold
+  str.replace(text, fmt"<b>{text}</b>")

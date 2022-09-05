@@ -215,6 +215,7 @@ import bible/views/error/[
   bookNotExists,
   chapterNotExists,
   verseNotExists,
+  queryTooSmall,
 ]
 from bible/db/models/document import getAllDocsShortNames
 
@@ -245,3 +246,10 @@ template withVerse*(ctx; doc: string; chapter, verseTextLen: int; body: untyped)
     body
   else:
     ctx.render(0, verseNotExists(doc, chapter, verse))
+
+template withSearchQuery*(ctx; query: string; body: untyped): untyped =
+  ## Check if the search query is valid
+  if query.len > 4:
+    body
+  else:
+    ctx.render(0, queryTooSmall(query))

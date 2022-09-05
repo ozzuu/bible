@@ -6,7 +6,7 @@ import pkg/karax/[
 ]
 
 from bible/views import View
-from bible/utils import url
+from bible/utils import url, assetUrl
 from bible/db/models/book import Book
 import bible/config
 
@@ -22,8 +22,12 @@ proc books*(doc: string; books: openArray[Book]): View =
         a(class = "home", href = url fmt"/"): text appName
         tdiv(class = "reading"):
           span(class = "current"): text doc
+      tdiv(class = "search"):
+        input(`type` = "text", id = "search", placeholder = "Search")
+        button(id = "submit_search")
       tdiv(class = "books"):
         for book in books:
           tdiv(class = "book"):
             a(href = url fmt"/{doc}/{book.shortName}"):
               text book.name
+      script(src = assetUrl "script/books.js")
