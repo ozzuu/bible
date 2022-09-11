@@ -53,7 +53,6 @@ proc getAccess*(docName, bookShortName: string; chapter: int; verse = 0): Access
 proc incAccess*(docName, bookShortName: string; chapter: int; verse = 0) =
   ## Increment the accesses for the page
   var access = getAccess(docName, bookShortName, chapter, verse)
-  echo docName, bookShortName, chapter, verse
   if access.accesses == 0:
     access = newAccess(docName, bookShortName, chapter, verse, 1)
     inDb: dbConn.insert access

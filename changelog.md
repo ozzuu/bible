@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 2.2.0 (Sep 11, 2022)
+
+- Fixed access counting
+
+---
+
 ## Version 2.1.0 (Sep 5, 2022)
 
 - Show document/book selection in each line
