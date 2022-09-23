@@ -13,6 +13,7 @@ Online MyBible document reader
 - [ ] Merge Info table with Document table
 - [ ] Show full book name at title
 - [ ] Fix search highlight by replacing with a case insensitive function
+- [ ] Add a dashboard to see the most accessed books, verses and some cool verses
 
 ## License
 
