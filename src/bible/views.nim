@@ -37,7 +37,7 @@ proc render*(ctx: Context; accesses: int; view: View) =
         footer:
           tdiv(class = "contribute"):
             text "This site is open-source! You can contribute at "
-            a(href = "https://github.com/ozzuu/bible", rel = "noreferrer",
+            a(href = "https://git.ozzuu.com/ozzuu/bible", rel = "noreferrer",
                 target = "_blank"):
               text "ozzuu/bible"
           tdiv(class = "credits"):

@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 2.2.1 (Sep 26, 2022)
+
+- Fixed project repo url
+
+---
+
 ## Version 2.2.0 (Sep 11, 2022)
 
 - Fixed access counting
