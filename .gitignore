@@ -5,3 +5,4 @@ db/all.db
 db/status.json
 error.log
 rolling.*
+db/mybibles
