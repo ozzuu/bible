@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 2.3.0 (Oct 2, 2022)
+
+- Disabled debug middleware for non-debug executions
+- Added auto server manipulation scripts
+
+---
+
 ## Version 2.2.1 (Sep 26, 2022)
 
 - Fixed project repo url

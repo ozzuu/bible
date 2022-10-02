@@ -47,7 +47,8 @@ proc serve =
       finally:
         await switch(ctx)
 
-  app.use debugRequestMiddleware()
+  if settings.debug:
+    app.use debugRequestMiddleware()
   app.use sessionMw()
   app.use staticFileMiddleware assetsDir
 
