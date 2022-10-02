@@ -15,6 +15,10 @@ Online MyBible document reader
 - [ ] Fix search highlight by replacing with a case insensitive function
 - [ ] Add a dashboard to see the most accessed books, verses and some cool verses
 - [ ] At search page, show: "Found 40 matches, showing 20-30" instead of "Found 40 results, showing page 2"
+- [ ] Add the commentaries
+  - [ ] Add DB
+  - [ ] Add importation
+  - [ ] Add to view (optionally hidden)
 
 ## License
 
