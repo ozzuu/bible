@@ -4,6 +4,7 @@ doc=$2
 docName=$3
 server=$4
 serverDir=$5
+setup=$6
 
 serverDocName=$doc.db
 allDbDir=db
@@ -15,6 +16,7 @@ echo "Document abbreviation: $doc"
 echo "Document full name: $docName"
 echo "SSH server (user@server): $server"
 echo "SSH server working dir: $serverDir"
+echo "Setup enabled: $setup"
 
 echo -ne "\nCorrect (press enter)? "; read correct
 if [ "$correct" != "" ]; then
@@ -22,15 +24,29 @@ if [ "$correct" != "" ]; then
   exit 1
 fi
 
+setupCmd=""
+
+if [ "$setup" != "yes" ]; then
+  if [ "$setup" != "no" ]; then
+    echo "Setup needs to be [yes|no]"
+    exit 1
+  fi
+else
+  setupCmd="
+echo -e \"\tSetup directories and files\" &&
+mkdir --parents \"$serverImportDir/$allDbDir\" &&
+cp .env \"$serverImportDir\" &&
+cp \"$allDbDir/$allDb\" \"$serverImportDir/$allDbDir\"
+"
+fi
+
 echo -e "\nImporting \"$docName\" from $docFile"
+
 
 cmds="
 echo -e \"\tGoing to dir\" &&
 cd $serverDir &&
-echo -e \"\tSetup directories and files\" &&
-mkdir --parents \"$serverImportDir/$allDbDir\" &&
-cp .env \"$serverImportDir\" &&
-cp \"$allDbDir/$allDb\" \"$serverImportDir/$allDbDir\" &&
+$setupCmd
 cd \"$serverImportDir\" &&
 echo -e \"\tCopying DB\" &&
 cat > \"$serverDocName\" &&

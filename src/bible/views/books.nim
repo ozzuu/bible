@@ -22,6 +22,8 @@ proc books*(doc: string; books: openArray[Book]): View =
         a(class = "home", href = url fmt"/"): text appName
         tdiv(class = "reading"):
           span(class = "current"): text doc
+      p:
+        text fmt"Showing {books.len} books"
       tdiv(class = "search"):
         input(`type` = "text", id = "search", placeholder = "Search")
         button(id = "submit_search")

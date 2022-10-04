@@ -17,7 +17,8 @@ proc documents*(documents: openArray[Document]): View =
     result.vnode = buildHtml(tdiv):
       h1:
         text appName
-      p: text "Documents"
+      p:
+        text fmt"Showing {documents.len} translations"
       tdiv(class = "documents"):
         for document in documents:
           tdiv(class = "document"):

@@ -1,7 +1,13 @@
+from std/strformat import fmt
+from std/strutils import toLowerAscii
+
 import pkg/norm/[
   model,
   pragmas
 ]
+from pkg/util/forStr import removeAccent
+
+from bible/config import bookVariations
 
 type
   Verse* = ref object of Model
@@ -50,16 +56,40 @@ proc getAllChapterVerses*(doc, bookShortName: string; chapter: int): seq[Verse] 
   if result[0].text.len == 0:
     discard pop result
 
-proc getBookVerse*(doc, bookShortName: string; chapter, verse: int): Verse =
-  ## Get the verse
-  result = newVerse()
+func getBookVariations(book: string): seq[string] =
+  ## Returns all book name variations of the current book name
+  let bookName = toLowerAscii removeAccent book
+  for variations in bookVariations:
+    for variation in variations:
+      if bookName == variation.removeAccent.toLowerAscii:
+        return variations
+
+func makeBookQuery(book: string): string =
+  ## Generates a query to get the book ignoring accents
+  var variations = "("
+  for x in getBookVariations book:
+    variations.add fmt"'{toLowerAscii x}', "
+  if variations.len > 1:
+    variations = variations[0..^3] & ")"
+  else:
+    variations = fmt"('{toLowerAscii book}')"
+  result = fmt"LOWER(Verse.bookShortName) in {variations}"
+
+proc getAllBooksVerse*(bookShortName: string; chapter, verse: int): seq[Verse] =
+  ## Get the verse of all books
+  result = @[newVerse()]
+  let bookQuery = makeBookQuery bookShortName
   try:
     inDb: dbConn.select(
       result,
-      "Verse.docName = ? and Verse.bookShortName = ? and Verse.chapter = ? and Verse.number = ?",
-      dbValue doc, dbValue bookShortName, dbValue chapter, dbValue verse
+      fmt"{bookQuery} and Verse.chapter = ? and Verse.number = ?",
+      dbValue chapter, dbValue verse
     )
-  except: discard
+  except:
+    result = @[]
+
+  for r in result:
+    echo r.docName
 
 proc getVersesQnt*(doc, bookShortName: string; chapter: int): int64 =
   ## Returns the quantity of verses in a chapter

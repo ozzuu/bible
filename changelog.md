@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 3.0.0 (Oct 4, 2022)
+
+- Import script fix
+- Compare performance fixes
+- Added compatibility to all book names in comparison
+  - Added a script to merge a new book names to the list
+- Search page number button size fix
+- Removed too small search block
+
+---
+
 ## Version 2.3.0 (Oct 2, 2022)
 
 - Disabled debug middleware for non-debug executions

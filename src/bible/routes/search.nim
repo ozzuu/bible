@@ -29,11 +29,10 @@ proc r_search*(ctx: Context) {.async.} =
         page = node{"page"}.getStr.tryParseInt 0
 
       ctx.withDoc doc:
-        ctx.withSearchQuery query:
-          var searchResults: tuple[results: seq[Verse]; matched: int64]
-          if page > 0:
-            searchResults = doc.search(query, page)
-          ctx.render(
-            getAccess(doc, "search", 0).accesses,
-            search(doc, query, page, searchResults.matched, searchResults.results)
-          )
+        var searchResults: tuple[results: seq[Verse]; matched: int64]
+        if page > 0:
+          searchResults = doc.search(query, page)
+        ctx.render(
+          getAccess(doc, "search", 0).accesses,
+          search(doc, query, page, searchResults.matched, searchResults.results)
+        )

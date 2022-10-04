@@ -28,19 +28,22 @@ proc r_compare*(ctx: Context) {.async.} =
         chapter = node{"chapter"}.getStr.tryParseInt 0
         verse = node{"verse"}.getStr.tryParseInt 0
       var
-        docsVerses: seq[CompareDocVerses]
+        docsVerses: seq[CompareDocVerse]
         versesQnt = 0'i64
+        verses = getAllBooksVerse(book, chapter, verse)
       for doc in getAllDocs():
-        var docVerse: CompareDocVerses
+        var docVerse: CompareDocVerse
         docVerse.doc = doc.shortName
         docVerse.docName = doc.name
 
-        let chapters = doc.shortName.getChaptersQnt book
-        if chapters > 0:
-          let bookVerse = doc.shortName.getBookVerse(book, chapter, verse)
-          if bookVerse.text.len > 0:
-            docVerse.verses.add bookVerse
-            docsVerses.add docVerse
+        var bookVerse: Verse
+        for verse in verses:
+          if verse.docName == doc.shortName:
+            bookVerse = verse
+            break
+        if not bookVerse.isNil and bookVerse.text.len > 0:
+          docVerse.verse = bookVerse
+          docsVerses.add docVerse
         if versesQnt == 0:
           versesQnt = doc.shortName.getVersesQnt(book, chapter)
         ctx.render(
