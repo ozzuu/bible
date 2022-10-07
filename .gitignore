@@ -6,6 +6,6 @@ db/status.json
 error.log
 rolling.*
 db/mybibles
-scripts/import.fish
+scripts/import.sh
 mergeBookNames/*.json
 mergeBookNames/*/*.json

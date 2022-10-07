@@ -108,6 +108,11 @@ const bookVariations* = [
   @["Jd", "Jude", "Jud"],
   @["Ap", "Rv", "Rev"],
   @["MAN", "PrMan"],
+
+
+  # apocrypha
+  @["1MA", "1Mac", "1Mc", "1Mb"],
+  @["2MA", "2Mac", "2Mc", "2Mb"],
 ]
 
 const itemsPerPage* = 10

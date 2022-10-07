@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.0.1 (Oct 7, 2022)
+
+- Added more book links to compare
+
+---
+
 ## Version 3.0.0 (Oct 4, 2022)
 
 - Import script fix
