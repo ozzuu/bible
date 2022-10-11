@@ -1,8 +1,8 @@
 # Package
 
 version       = "3.0.2"
-author        = "Thiago Navarro"
-description   = "Ozzuu Bible"
+author        = "Ozzuu"
+description   = "The official repository of the Ozzuu Bible"
 license       = "MIT"
 srcDir        = "src"
 bin           = @["bible"]
