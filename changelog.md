@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.0.2 (Oct 11, 2022)
+
+- Fixed access count resetting
+
+---
+
 ## Version 3.0.1 (Oct 7, 2022)
 
 - Added more book links to compare

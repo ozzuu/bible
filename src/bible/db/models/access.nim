@@ -57,9 +57,12 @@ proc incAccess*(docName, bookShortName: string; chapter: int; verse = 0) =
     access = newAccess(docName, bookShortName, chapter, verse, 1)
     inDb: dbConn.insert access
   else:
-    if fromUnix(access.time) + 1.months < now().toTime:
-      access.time = nowUnix()
-      access.accesses = 1
-    else:
+    block:
+      let nowTime = now()
+      if $($nowTime.utc)[8..9] == "01":
+        if fromUnix(access.time) + 1.months < nowTime.toTime:
+          access.time = nowUnix()
+          access.accesses = 1
+          break
       inc access.accesses
     inDb: dbConn.update access
