@@ -19,7 +19,7 @@ Online MyBible document reader
   - [ ] Add DB
   - [ ] Add importation
   - [ ] Add to view (optionally hidden)
-- [ ] Allow compare same books with different names like: Gen and Gn
+- [x] Allow compare same books with different names like: Gen and Gn
 - [ ] Add custom styling for printing
 
 ## License
