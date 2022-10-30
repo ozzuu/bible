@@ -1,0 +1,73 @@
+// Teal
+$color: mix(teal, white, 80)
+$colorBg: #333
+$colorWarning: #f78282
+
+$color_print: mix(black, white, 40)
+$colorBg_print: white
+$colorWarning_print: #f78282
+
+$colorAccent: mix($color, black, 40)
+$colorBgSecondary: mix($colorBg, white, 90)
+$colorLink: $color
+$colorSecondary: mix($color, white, 50)
+$colorSecondaryAccent: mix($color, $colorSecondary, 30)
+$colorShadow: mix($colorBgSecondary, $color, 50)
+$colorTable: $color
+$colorText: mix($colorBg, white, 10)
+$colorTextSecondary: mix($color, white, 15)
+
+// print
+$colorAccent_print: mix($color_print, white, 40)
+$colorBgSecondary_print: mix($colorBg_print, black, 90)
+$colorLink_print: $color_print
+$colorSecondary_print: mix($color_print, white, 50)
+$colorSecondaryAccent_print: mix($color_print, $colorSecondary_print, 30)
+$colorShadow_print: mix($colorBgSecondary_print, $color_print, 50)
+$colorTable_print: $color_print
+$colorText_print: mix($colorBg_print, black, 10)
+$colorTextSecondary_print: mix($color_print, black, 40)
+
+:root
+  --active-brightness: 0.85
+  --border-radius: .5em
+  --box-shadow: 0 0 .4em
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif
+  --hover-brightness: 1.2
+  --justify-important: center
+  --justify-normal: left
+  --line-height: 1.5
+  --width-card: 300px
+  --width-card-medium: 24em
+  --width-card-wide: 800px
+  --width-content: 1080px
+
+
+:root
+  --color: #{$color_print}
+  --color-accent: #{$colorAccent_print}
+  --color-warning: #{$colorWarning_print}
+  --color-bg: #{$colorBg_print}
+  --color-bg-secondary: #{$colorBgSecondary_print}
+  --color-link: #{$colorLink_print}
+  --color-secondary: #{$colorSecondary_print} 
+  --color-secondary-accent: #{$colorSecondaryAccent_print}
+  --color-shadow: #{$colorShadow_print}
+  --color-table: #{$colorTable_print}
+  --color-text: #{$colorText_print}
+  --color-text-secondary: #{$colorTextSecondary_print}
+
+@media screen
+  :root
+    --color: #{$color}
+    --color-accent: #{$colorAccent}
+    --color-warning: #{$colorWarning}
+    --color-bg: #{$colorBg}
+    --color-bg-secondary: #{$colorBgSecondary}
+    --color-link: #{$colorLink}
+    --color-secondary: #{$colorSecondary}
+    --color-secondary-accent: #{$colorSecondaryAccent}
+    --color-shadow: #{$colorShadow}
+    --color-table: #{$colorTable}
+    --color-text: #{$colorText}
+    --color-text-secondary: #{$colorTextSecondary}

@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.1.0 (Oct 30, 2022)
+
+- Changed color theme to teal based
+
+---
+
 ## Version 3.0.2 (Oct 11, 2022)
 
 - Fixed access count resetting
