@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 3.2.0 (Nov 2, 2022)
+
+- Fixed MySQL code injection in compare book GET parameter
+<!-- - Added printing page to show all verses of all chapters of a book -->
+- Removed debug print in compare route
+
+---
+
 ## Version 3.1.0 (Oct 30, 2022)
 
 - Changed color theme to teal based

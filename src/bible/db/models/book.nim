@@ -45,6 +45,7 @@ proc getAllBooks*(doc: string): seq[Book] =
     inDb: dbConn.select(result, "Book.docName = ?", dbValue doc)
   except: discard
 
+
 proc getChaptersQnt*(doc, bookShortName: string): int =
   var book = newBook()
   try:
@@ -52,3 +53,13 @@ proc getChaptersQnt*(doc, bookShortName: string): int =
   except: discard
     
   result = book.chapters
+
+proc getBook*(doc, bookShortName: string): Book =
+  result = newBook()
+  try:
+    inDb: dbConn.select(
+      result,
+      "Book.docName = ? and Book.shortName = ?",
+      dbValue doc, dbValue bookShortName
+    )
+  except: discard

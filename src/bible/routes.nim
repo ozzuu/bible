@@ -7,6 +7,7 @@ import bible/routes/[
   verses,
   compare,
   search,
+  printBook,
 ]
 import bible/routes/api/incAccess
 
@@ -20,6 +21,7 @@ type
 const
   routesDefinition*: seq[Route] = @[ ## All application routes
     ("", @[
+      pattern("/print/{doc}/{book}", r_printBook, HttpGet, "print book"),
       pattern("/{doc}/search/{query}/{page}", r_search, HttpGet, "search_verses"),
       pattern("/compare/{book}/{chapter}/{verse}", r_compare, HttpGet, "compare_verse"),
       pattern("/{doc}/{book}/{chapter}", r_verses, HttpGet, "verses"),

@@ -72,11 +72,11 @@ func makeBookQuery(book: string): string =
   if variations.len > 1:
     variations = variations[0..^3] & ")"
   else:
-    variations = fmt"('{toLowerAscii book}')"
+    variations = fmt"('{toLowerAscii dbQuote book}')"
   result = fmt"LOWER(Verse.bookShortName) in {variations}"
 
 proc getAllBooksVerse*(bookShortName: string; chapter, verse: int): seq[Verse] =
-  ## Get the verse of all books
+  ## Get same verse of all books
   result = @[newVerse()]
   let bookQuery = makeBookQuery bookShortName
   try:
@@ -87,9 +87,18 @@ proc getAllBooksVerse*(bookShortName: string; chapter, verse: int): seq[Verse] =
     )
   except:
     result = @[]
-
-  for r in result:
-    echo r.docName
+    
+proc getAllBookVerses*(doc, bookShortName: string): seq[Verse] =
+  ## Get same verse of all books
+  result = @[newVerse()]
+  try:
+    inDb: dbConn.select(
+      result,
+      fmt"Verse.docName = ? and Verse.bookShortName = ?",
+      dbValue doc, dbValue bookShortName
+    )
+  except:
+    result = @[]
 
 proc getVersesQnt*(doc, bookShortName: string; chapter: int): int64 =
   ## Returns the quantity of verses in a chapter
