@@ -9,3 +9,5 @@ db/mybibles
 scripts/import.sh
 mergeBookNames/*.json
 mergeBookNames/*/*.json
+pdfReader/pdf.js
+node_modules
