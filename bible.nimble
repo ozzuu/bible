@@ -1,6 +1,6 @@
 # Package
 
-version       = "3.1.0"
+version       = "3.3.0"
 author        = "Ozzuu"
 description   = "Ozzuu Bible is a online MyBible document reader"
 license       = "MIT"

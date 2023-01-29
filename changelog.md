@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.3.0 (1w 29d 1m 2023y)
+
+- Added Cepher comparison support
+
+---
+
 ## Version 3.2.0 (Nov 2, 2022)
 
 - Fixed MySQL code injection in compare book GET parameter

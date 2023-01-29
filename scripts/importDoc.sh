@@ -51,8 +51,8 @@ cd \"$serverImportDir\" &&
 echo -e \"\tCopying DB\" &&
 cat > \"$serverDocName\" &&
 echo -e \"\tStarting import\" &&
-nohup bible add -d \"$serverDocName\" -n \"$doc\" -f \"$docName\" -s \"$allDbDir/status.json\" &&
-nohup bible update_chapters_quantity -d \"$doc\" &&
+bible add -d \"$serverDocName\" -n \"$doc\" -f \"$docName\" -s \"$allDbDir/status.json\" &&
+bible update_chapters_quantity -d \"$doc\" &&
 echo -e \"\tDeleting DB\" &&
 rm \"$serverDocName\"
 "
