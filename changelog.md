@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 3.4.0 (07/02/2023)
+
+- Added links in strongs to see their meaning
+- Added a margin in strongs elements
+
+---
+
 ## Version 3.3.0 (1w 29d 1m 2023y)
 
 - Added Cepher comparison support
