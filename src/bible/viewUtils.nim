@@ -11,8 +11,6 @@ func getStrongUrl(strong: string): string =
   of 'h': result.add "hebrew"
   of 'g': result.add "greek"
   else:
-    debugecho kind
-    debugecho strong
     return fmt"https://ddg.gg/strong {strong}"
   result.add fmt"/strongs_{strong[1..^1]}.htm"
 
@@ -31,7 +29,6 @@ proc parseVerse*(verse: string): string =
   echo tmp
   for part in tmp.split "<S>":
     let parts = part.split "</S>"
-    echo parts
     if parts.len == 2:
       let
         strong = parts[0].strip
