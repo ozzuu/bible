@@ -19,6 +19,6 @@ proc r_books*(ctx: Context) {.async.} =
       let doc = node{"doc"}.getStr
       ctx.withDoc doc:
         ctx.render(
-          getAccess(doc, "", 0).accesses,
+          getAccess(doc, "", 0),
           books(doc, doc.getAllBooks)
         )

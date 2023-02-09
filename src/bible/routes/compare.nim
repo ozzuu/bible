@@ -47,6 +47,6 @@ proc r_compare*(ctx: Context) {.async.} =
         if versesQnt == 0:
           versesQnt = doc.shortName.getVersesQnt(book, chapter)
         ctx.render(
-          getAccess("compare", book, chapter, verse).accesses,
+          getAccess("compare", book, chapter, verse),
           compare(docsVerses, book, chapter, verse, versesQnt)
         )

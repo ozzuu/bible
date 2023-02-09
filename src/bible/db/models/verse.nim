@@ -118,22 +118,40 @@ proc getVersesQnt*(doc, bookShortName: string; chapter: int): int64 =
 from std/strformat import fmt
 from bible/config import itemsPerPage
 
-proc search*(doc, query: string; page: int): tuple[results: seq[Verse]; matched: int64] =
+proc search*(doc, query: string; page: int; book = ""): tuple[results: seq[Verse]; matched: int64] =
   ## Searches all verses that have the `query` in same document
   result.results = @[newVerse()]
   result.matched = 0
   try:
-    inDb:
-      result.matched = dbConn.count(
-        Verse,
-        "number",
-        dist = false,
-        cond = "Verse.docName = ? and Verse.text like ?",
-        dbValue doc, dbValue fmt"%{query}%"
-      )
-      dbConn.select(
-        result.results,
-        fmt"Verse.docName = ? and Verse.text like ? LIMIT {itemsPerPage} OFFSET {(page - 1) * itemsPerPage}",
-        dbValue doc, dbValue fmt"%{query}%"
-      )
-  except: discard
+    if book.len > 0:
+      let cond = "Verse.docName = ? and Verse.text like ? and Verse.bookShortName = ?"
+      inDb:
+        result.matched = dbConn.count(
+          Verse,
+          "number",
+          dist = false,
+          cond = cond,
+          dbValue doc, dbValue fmt"%{query}%", dbValue book
+        )
+        dbConn.select(
+          result.results,
+          fmt"{cond} LIMIT {itemsPerPage} OFFSET {(page - 1) * itemsPerPage}",
+          dbValue doc, dbValue fmt"%{query}%", dbValue book
+        )
+    else:
+      let cond = "Verse.docName = ? and Verse.text like ?"
+      inDb:
+        result.matched = dbConn.count(
+          Verse,
+          "number",
+          dist = false,
+          cond = cond,
+          dbValue doc, dbValue fmt"%{query}%"
+        )
+        dbConn.select(
+          result.results,
+          fmt"{cond} LIMIT {itemsPerPage} OFFSET {(page - 1) * itemsPerPage}",
+          dbValue doc, dbValue fmt"%{query}%"
+        )
+  except:
+    discard result.results.pop

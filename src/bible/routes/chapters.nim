@@ -25,6 +25,6 @@ proc r_chapters*(ctx: Context) {.async.} =
         let chapters = doc.getChaptersQnt(book)
         ctx.withBook(book, chapters):
           ctx.render(
-            getAccess(doc, book, 0).accesses,
+            getAccess(doc, book, 0),
             chapters(doc, book, chapters)
           )

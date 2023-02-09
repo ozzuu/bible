@@ -6,7 +6,7 @@ import pkg/karax/[
 ]
 
 from bible/views import View
-from bible/utils import url
+from bible/utils import url, assetUrl
 import bible/config
 
 proc chapters*(doc, book: string; chapters: int): View =
@@ -23,7 +23,11 @@ proc chapters*(doc, book: string; chapters: int): View =
         a(class = "document", href = url fmt"/{doc}"): text doc
         tdiv(class = "reading"):
           span(class = "current"): text book
+      tdiv(class = "search"):
+        input(`type` = "text", id = "search", placeholder = "Search")
+        button(id = "submit_search")
       tdiv(class = "chapters"):
         for chapter in 1..chapters:
           tdiv(class = "chapter"):
             a(href = url fmt"/{doc}/{book}/{chapter}"): text $chapter
+      script(src = assetUrl "script/chapters.js")

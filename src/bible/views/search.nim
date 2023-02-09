@@ -20,9 +20,11 @@ proc search*(
   page: int;
   matched: int64;
   results: openArray[Verse];
+  book = ""
 ): View =
   result.code = Http200
   result.name = fmt"{query} at {doc}"
+  let linkAddBook = if book.len > 0: fmt"/{book}" else: ""
   withConf:
     result.vnode = buildHtml(tdiv):
       tdiv(class = "top"):
@@ -33,6 +35,9 @@ proc search*(
         a(class = "home", href = url fmt"/"): text appName
         text " - "
         a(class = "document", href = url fmt"/{doc}"): text doc
+        if book.len > 0:
+          text " - "
+          a(class = "book", href = url fmt"/{doc}/{book}"): text book
         tdiv(class = "reading"):
           span(class = "current"):
             text fmt"Search ""{query}"""
@@ -68,7 +73,7 @@ proc search*(
         # h2: text "Pages"
         tdiv(class = "pages"):
           let
-            pageUrl = fmt"/{doc}/search/{query}/"
+            pageUrl = fmt"/{doc}{linkAddBook}/search/{query}/"
             firstPage = 1
             lastPage = if matched mod itemsPerPage == 0: matched div itemsPerPage else: (matched div itemsPerPage) + 1
           var newPage = page

@@ -22,7 +22,8 @@ const
   routesDefinition*: seq[Route] = @[ ## All application routes
     ("", @[
       pattern("/print/{doc}/{book}", r_printBook, HttpGet, "print book"),
-      pattern("/{doc}/search/{query}/{page}", r_search, HttpGet, "search_verses"),
+      pattern("/{doc}/search/{query}/{page}", r_bibleSearch, HttpGet, "bible_search"),
+      pattern("/{doc}/{book}/search/{query}/{page}", r_bookSearch, HttpGet, "book_search"),
       pattern("/compare/{book}/{chapter}/{verse}", r_compare, HttpGet, "compare_verse"),
       pattern("/{doc}/{book}/{chapter}", r_verses, HttpGet, "verses"),
       pattern("/{doc}/{book}", r_chapters, HttpGet, "chapters"),

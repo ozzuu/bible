@@ -8,13 +8,14 @@ import pkg/karax/[
 
 from bible/config import withConf, appName
 from bible/utils import assetUrl
+from bible/db/models/access import Access
 
 type View* = tuple
   name: string
   vnode: VNode
   code: HttpCode
 
-proc render*(ctx: Context; accesses: int; view: View) =
+proc render*(ctx: Context; access: Access; view: View) =
   ## Renders the karax element
   var vnode: VNode
   withConf:
@@ -30,10 +31,10 @@ proc render*(ctx: Context; accesses: int; view: View) =
       body:
         tdiv(class = "content"):
           view.vnode
-          if accesses > 0:
+          if access.allAccesses > 0:
             footer:
               tdiv(class = "accesses"):
-                text fmt"This page was accessed {accesses} times in this month"
+                text fmt"This page was accessed {access.monthlyAccesses} times in this month. {access.allAccesses} times in total"
         footer:
           tdiv(class = "contribute"):
             text "This site is open-source! You can contribute at "
@@ -46,7 +47,8 @@ proc render*(ctx: Context; accesses: int; view: View) =
                 target = "_blank"):
               text "thisago"
           tdiv(class = "glory"):
-            text "All glory to YAHUAH"
+            text "All glory to יהוה"
+        script(src = assetUrl "script/bible.js")
         script(src = assetUrl "script/incAccess.js")
 
   resp(&"<!DOCTYPE html>\l{vnode}", view.code)

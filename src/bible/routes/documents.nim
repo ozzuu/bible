@@ -16,6 +16,6 @@ proc r_documents*(ctx: Context) {.async.} =
   ## All documents
   ctx.forceHttpMethod HttpGet
   ctx.render(
-    getAccess("", "", 0).accesses,
+    getAccess("", "", 0),
     documents(getAllDocs())
   )

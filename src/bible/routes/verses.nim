@@ -30,6 +30,6 @@ proc r_verses*(ctx: Context) {.async.} =
           let bookVerses = doc.getAllChapterVerses(book, chapter)
           ctx.withChapter(chapter, bookVerses.len):
             ctx.render(
-              getAccess(doc, book, chapter).accesses,
+              getAccess(doc, book, chapter),
               verses(doc, book, chapters, chapter, bookVerses)
             )

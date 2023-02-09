@@ -217,31 +217,32 @@ import bible/views/error/[
   verseNotExists
 ]
 from bible/db/models/document import getAllDocsShortNames
+from bible/db/models/access import newAccess
 
 template withDoc*(ctx; doc: string; body: untyped): untyped =
   ## Check if the document exists
   if doc in getAllDocsShortNames():
     body
   else:
-    ctx.render(0, docNotExists doc)
+    ctx.render(newAccess(), docNotExists doc)
 
 template withBook*(ctx; book: string; chapters: int; body: untyped): untyped =
   ## Check if the book exists
   if chapters > 0:
     body
   else:
-    ctx.render(0, bookNotExists book)
+    ctx.render(newAccess(), bookNotExists book)
 
 template withChapter*(ctx; chapter, verses: int; body: untyped): untyped =
   ## Check if the chapter exists
   if verses > 0:
     body
   else:
-    ctx.render(0, chapterNotExists chapter)
+    ctx.render(newAccess(), chapterNotExists chapter)
 
 template withVerse*(ctx; doc: string; chapter, verseTextLen: int; body: untyped): untyped =
   ## Check if the verse exists
   if verseTextLen > 0:
     body
   else:
-    ctx.render(0, verseNotExists(doc, chapter, verse))
+    ctx.render(newAccess(), verseNotExists(doc, chapter, verse))

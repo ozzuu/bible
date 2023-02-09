@@ -12,11 +12,12 @@ type
     chapter*: int
     verse*: int
     time*: int64
-    accesses*: int
+    monthlyAccesses*: int
+    allAccesses*: int
 
 proc newAccess*(
   docName, bookShortName: string;
-  chapter, verse, accesses: int;
+  chapter, verse, allAccesses, monthlyAccesses: int;
 ): Access =
   ## Creates new `Access`
   new result
@@ -25,7 +26,8 @@ proc newAccess*(
   result.chapter = chapter
   result.verse = verse
   result.time = nowUnix()
-  result.accesses = accesses
+  result.allAccesses = allAccesses
+  result.monthlyAccesses = monthlyAccesses
 
 proc newAccess*: Access =
   ## Creates new blank `Access`
@@ -34,7 +36,8 @@ proc newAccess*: Access =
     bookShortName = "",
     chapter = 0,
     verse = 0,
-    accesses = 0
+    allAccesses = 0,
+    monthlyAccesses = 0
   )
 
 import bible/db
@@ -53,8 +56,8 @@ proc getAccess*(docName, bookShortName: string; chapter: int; verse = 0): Access
 proc incAccess*(docName, bookShortName: string; chapter: int; verse = 0) =
   ## Increment the accesses for the page
   var access = getAccess(docName, bookShortName, chapter, verse)
-  if access.accesses == 0:
-    access = newAccess(docName, bookShortName, chapter, verse, 1)
+  if access.allAccesses == 0:
+    access = newAccess(docName, bookShortName, chapter, verse, 1, 1)
     inDb: dbConn.insert access
   else:
     block:
@@ -62,7 +65,8 @@ proc incAccess*(docName, bookShortName: string; chapter: int; verse = 0) =
       if $($nowTime.utc)[8..9] == "01":
         if fromUnix(access.time) + 1.months < nowTime.toTime:
           access.time = nowUnix()
-          access.accesses = 1
+          access.monthlyAccesses = 1
           break
-      inc access.accesses
+      inc access.allAccesses
+      inc access.monthlyAccesses
     inDb: dbConn.update access

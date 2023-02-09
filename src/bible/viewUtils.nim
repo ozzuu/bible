@@ -12,7 +12,7 @@ func getStrongUrl(strong: string): string =
   of 'g': result.add "greek"
   else:
     return fmt"https://ddg.gg/strong {strong}"
-  result.add fmt"/strongs_{strong[1..^1]}.htm"
+  result.add fmt"/{strong[1..^1]}.htm"
 
 proc parseVerse*(verse: string): string =
   ## Parse the verse fixing XML tags

@@ -29,6 +29,6 @@ proc r_printBook*(ctx: Context) {.async.} =
           for verse in doc.getAllBookVerses book:
             verses.add verse
         ctx.render(
-          getAccess("print_" & doc, "", 0).accesses,
+          getAccess("print_" & doc, "", 0),
           printBook(doc, doc.getBook book, chapters, verses)
         )

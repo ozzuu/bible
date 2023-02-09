@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 3.5.0 (09/02/2023)
+
+- Fixed strong URL
+- Added individual book search
+- Added access counting that not resets too
+- Added search for each book individually
+
+---
+
 ## Version 3.4.0 (07/02/2023)
 
 - Added links in strongs to see their meaning
