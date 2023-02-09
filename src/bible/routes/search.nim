@@ -34,7 +34,7 @@ proc r_bibleSearch*(ctx: Context) {.async.} =
         if page > 0:
           searchResults = doc.search(query, page)
         ctx.render(
-          getAccess(doc, "search", 0),
+          getAccess(doc, fmt"bible_search_{query}_{page}", 0),
           search(doc, query, page, searchResults.matched, searchResults.results)
         )
 
@@ -54,6 +54,6 @@ proc r_bookSearch*(ctx: Context) {.async.} =
         if page > 0:
           searchResults = doc.search(query, page, book)
         ctx.render(
-          getAccess(doc, fmt"{book}_search", 0),
+          getAccess(doc, fmt"{book}_search_{query}_{page}", 0),
           search(doc, query, page, searchResults.matched, searchResults.results, book)
         )

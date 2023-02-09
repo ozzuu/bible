@@ -23,10 +23,7 @@ proc parseVerse*(verse: string): string =
   }).multiReplace({
     "<n>": "<span class=\"explanation\">",
     "</n>": "</span>",
-    # "<S>": "<sup class=\"strong\">",
-    # "</S>": "</sup>",
   })
-  echo tmp
   for part in tmp.split "<S>":
     let parts = part.split "</S>"
     if parts.len == 2:

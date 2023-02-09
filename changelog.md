@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 3.5.1 (09/02/2023)
+
+- Fixed access counting
+- Removed debug echo
+
+---
+
 ## Version 3.5.0 (09/02/2023)
 
 - Fixed strong URL

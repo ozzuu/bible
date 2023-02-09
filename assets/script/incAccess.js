@@ -2,8 +2,8 @@
   await fetch("/api/incAccess", {
     method: "post",
     body: JSON.stringify({
-      "doc": doc,
-      "book": book,
+      "doc": decodeURIComponent(doc),
+      "book": decodeURIComponent(book),
       "chapter": chapter,
       "verse": verse,
     }),
