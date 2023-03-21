@@ -53,8 +53,6 @@ proc getAllChapterVerses*(doc, bookShortName: string; chapter: int): seq[Verse] 
       dbValue doc, dbValue bookShortName, dbValue chapter
     )
   except: discard
-  if result[0].text.len == 0:
-    discard pop result
 
 func getBookVariations(book: string): seq[string] =
   ## Returns all book name variations of the current book name

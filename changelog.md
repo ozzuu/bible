@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 3.6.0 (21/03/2023)
+
+<!-- - Using [thisago/bibleTools](https://git.ozzuu.com/thisago/bibleTools) lib to -->
+  parse book name (closes)
+- Fixed #10
+
+---
+
 ## Version 3.5.1 (09/02/2023)
 
 - Fixed access counting

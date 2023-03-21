@@ -28,6 +28,7 @@ proc r_verses*(ctx: Context) {.async.} =
         let chapters = doc.getChaptersQnt(book)
         ctx.withBook(book, chapters):
           let bookVerses = doc.getAllChapterVerses(book, chapter)
+          echo bookVerses.len
           ctx.withChapter(chapter, bookVerses.len):
             ctx.render(
               getAccess(doc, book, chapter),

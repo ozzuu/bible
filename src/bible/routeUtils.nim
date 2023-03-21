@@ -235,6 +235,7 @@ template withBook*(ctx; book: string; chapters: int; body: untyped): untyped =
 
 template withChapter*(ctx; chapter, verses: int; body: untyped): untyped =
   ## Check if the chapter exists
+  echo verses
   if verses > 0:
     body
   else:
