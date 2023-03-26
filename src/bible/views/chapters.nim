@@ -5,6 +5,8 @@ import pkg/karax/[
   vdom
 ]
 
+from pkg/bibleTools import identifyBibleBook, en
+
 from bible/views import View
 from bible/utils import url, assetUrl
 import bible/config
@@ -22,7 +24,7 @@ proc chapters*(doc, book: string; chapters: int): View =
         text " - "
         a(class = "document", href = url fmt"/{doc}"): text doc
         tdiv(class = "reading"):
-          span(class = "current"): text book
+          span(class = "current"): text book.identifyBibleBook.book.en
       tdiv(class = "search"):
         input(`type` = "text", id = "search", placeholder = "Search")
         button(id = "submit_search")

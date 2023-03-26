@@ -5,6 +5,8 @@ import pkg/karax/[
   vdom
 ]
 
+from pkg/bibleTools import identifyBibleBook, en
+
 import bible/db/models/verse
 from bible/views import View
 from bible/utils import url, assetUrl
@@ -35,7 +37,7 @@ proc verses*(
         text " - "
         a(class = "document", href = url fmt"/{doc}"): text doc
         tdiv(class = "reading"):
-          a(class = "book", href = url fmt"/{doc}/{book}"): text book
+          a(class = "book", href = url fmt"/{doc}/{book}"): text book.identifyBibleBook.book.en
           span(class = "current"):
             text $chapter
             span(class = "current-verse")

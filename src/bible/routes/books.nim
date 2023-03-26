@@ -4,6 +4,7 @@ import pkg/prologue
 
 import bible/db/models/[
   book,
+  document,
   access
 ]
 import bible/routeUtils
@@ -18,7 +19,8 @@ proc r_books*(ctx: Context) {.async.} =
     node.ifContains(all = ["doc"]):
       let doc = node{"doc"}.getStr
       ctx.withDoc doc:
+        let document = doc.getDoc
         ctx.render(
           getAccess(doc, "", 0),
-          books(doc, doc.getAllBooks)
+          books(document, doc.getAllBooks)
         )

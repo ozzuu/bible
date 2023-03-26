@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 3.7.0 (27/03/2023)
+
+- Added complete book name to pages (english parsed)
+- Added complete document name to book list page
+
+---
+
 ## Version 3.6.0 (26/03/2023)
 
 - Using [thisago/bibleTools](https://git.ozzuu.com/thisago/bibleTools) lib to

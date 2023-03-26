@@ -385,7 +385,6 @@ proc renameBookNames(docName: string) =
     var
       verses = @[newVerse()]
       versesToEdit: seq[Verse]
-      needUpdate = false
     inDb: dbConn.select(verses, "Verse.docName = ?", dbValue docName)
     if verses.len == 0:
       echo "No verses to rename"

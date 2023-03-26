@@ -34,6 +34,10 @@ proc getAllDocs*: seq[Document] =
   result = @[newDocument()]
   inDb: dbConn.selectAll result
 
+proc getDoc*(shortName: string): Document =
+  result = newDocument()
+  inDb: dbConn.select(result, "Document.shortName = ?", dbValue shortName)
+
 proc getAllDocsShortNames*: seq[string] =
   for doc in getAllDocs():
     result.add doc.shortName
