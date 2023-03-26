@@ -414,23 +414,15 @@ proc getAllDocuments =
 
 when isMainModule:
   import pkg/cligen
-  dispatchMulti([
-    bible.serve
-  ], [
-    addDb,
-    short = {"docName": 'n'}
-  ], [
-    updateChaptersQuantity
-  ], [
-    renameDocName
-  ], [
-    deleteDoc
-  ], [
-    deleteAccessTable
-  ], [
-    renameBookNames
-  ], [
-    getAllDocuments
-  ])
+  dispatchMulti(
+    [bible.serve],
+    [addDb, short = {"docName": 'n'}],
+    [updateChaptersQuantity],
+    [renameDocName],
+    [deleteDoc],
+    [deleteAccessTable],
+    [renameBookNames],
+    [getAllDocuments]
+  )
 else:
   {.fatal: "This app cannot be imported.".}

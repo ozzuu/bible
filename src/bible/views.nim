@@ -18,7 +18,6 @@ type View* = tuple
 proc render*(ctx: Context; access: Access; view: View) =
   ## Renders the karax element
   var vnode: VNode
-  echo access[]
   withConf:
     vnode = buildHtml(html):
       head:

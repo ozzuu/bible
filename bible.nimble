@@ -24,16 +24,14 @@ requires "bibleTools"
 # Frontend
 requires "karax"
 
-proc defaultSwitch =
-  --opt:speed
-  --define:release
-  --outDir:build
+from std/strformat import fmt
+
+proc buildCmd(args = "") =
+  exec fmt"nimble --passL:-static --passC:-static --opt:speed -d:release {args} build"
+  exec fmt"strip {binDir}/{bin[0]}"
 
 task buildRelease, "Builds the release version":
-  defaultSwitch()
-  setCommand "c", "./src/bible"
+  buildCmd()
   
 task buildDebug, "Builds the release debug":
-  defaultSwitch()
-  --define:debug
-  setCommand "c", "./src/bible"
+  buildCmd "-d:debug"
