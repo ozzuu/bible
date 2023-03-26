@@ -15,10 +15,11 @@ requires "nim >= 1.6.4"
 
 # Backend
 requires "prologue"
-requires "norm"
+requires "https://github.com/thisago/norm"# "norm"
 requires "cligen"
 
 requires "util"
+requires "bibleTools"
 
 # Frontend
 requires "karax"

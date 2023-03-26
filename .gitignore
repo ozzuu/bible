@@ -1,7 +1,7 @@
 build/
 .env
 *.log
-db/all.db
+db/*.db
 db/status.json
 error.log
 rolling.*

@@ -6,8 +6,7 @@ import pkg/norm/[
   pragmas
 ]
 from pkg/util/forStr import removeAccent
-
-from bible/config import bookVariations
+from pkg/bibleTools import `$`, BibleVerse, identifyBibleBook
 
 type
   Verse* = ref object of Model
@@ -17,6 +16,14 @@ type
     chapter*: int
     number*: int
     text*: string
+
+func `$`*(self: Verse): string =
+  $BibleVerse(
+    book: self.bookShortName.identifyBibleBook,
+    chapter: self.chapter,
+    verses: @[self.number],
+    translation: self.docName
+  )
 
 proc newVerse*(
   docName, bookShortName: string;
@@ -54,34 +61,14 @@ proc getAllChapterVerses*(doc, bookShortName: string; chapter: int): seq[Verse] 
     )
   except: discard
 
-func getBookVariations(book: string): seq[string] =
-  ## Returns all book name variations of the current book name
-  let bookName = toLowerAscii removeAccent book
-  for variations in bookVariations:
-    for variation in variations:
-      if bookName == variation.removeAccent.toLowerAscii:
-        return variations
-
-func makeBookQuery(book: string): string =
-  ## Generates a query to get the book ignoring accents
-  var variations = "("
-  for x in getBookVariations book:
-    variations.add fmt"'{toLowerAscii x}', "
-  if variations.len > 1:
-    variations = variations[0..^3] & ")"
-  else:
-    variations = fmt"('{toLowerAscii dbQuote book}')"
-  result = fmt"LOWER(Verse.bookShortName) in {variations}"
-
 proc getAllBooksVerse*(bookShortName: string; chapter, verse: int): seq[Verse] =
   ## Get same verse of all books
   result = @[newVerse()]
-  let bookQuery = makeBookQuery bookShortName
   try:
     inDb: dbConn.select(
       result,
-      fmt"{bookQuery} and Verse.chapter = ? and Verse.number = ?",
-      dbValue chapter, dbValue verse
+      fmt"Verse.bookShortName = ? and Verse.chapter = ? and Verse.number = ?",
+      dbValue bookShortName, dbValue chapter, dbValue verse
     )
   except:
     result = @[]

@@ -3,6 +3,7 @@ from std/strutils import contains
 import pkg/prologue
 
 from pkg/util/forStr import tryParseInt
+from pkg/bibleTools import identifyBibleBook, enAbbr
 
 import bible/db/models/[
   verse,
@@ -24,7 +25,7 @@ proc r_compare*(ctx: Context) {.async.} =
   ctx.withParams(get = false, path = true):
     node.ifContains(all = ["book", "chapter", "verse"]):
       let
-        book = node{"book"}.getStr
+        book = node{"book"}.getStr.identifyBibleBook.book.enAbbr
         chapter = node{"chapter"}.getStr.tryParseInt 0
         verse = node{"verse"}.getStr.tryParseInt 0
       var

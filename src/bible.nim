@@ -60,7 +60,7 @@ proc serve =
   app.run()
 
 
-import std/db_sqlite
+import pkg/db_connector/db_sqlite
 from std/strutils import join, parseInt
 from std/strformat import fmt
 from std/tables import Table, `[]`, `[]=`, hasKey
@@ -269,8 +269,6 @@ proc updateChaptersQuantity(docName: string) =
 
 proc renameDocName(oldDocName, docName, fullDocName: string) =
   ## Updates the quantity of chapters of each book
-  ## 
-  ## Provide the short document name
   inDb:
     dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
 
@@ -315,14 +313,12 @@ proc renameDocName(oldDocName, docName, fullDocName: string) =
 
 proc deleteDoc(docName: string) =
   ## Deletes the document
-  ## 
-  ## Provide the short document name
   inDb:
     dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
 
   echo fmt"Deleting '{docName}'"
 
-  block renameDocument:
+  block deleteDocument:
     try:
       var document = newDocument()
       inDb: dbConn.select(document, "Document.shortName = ?", dbValue docName)
@@ -331,7 +327,7 @@ proc deleteDoc(docName: string) =
     except:
       echo fmt"Already deleted document"
 
-  block renameBooks:
+  block deleteBooks:
     var books = @[newBook()]
     inDb: dbConn.select(books, "Book.docName = ?", dbValue docName)
     if books.len == 0:
@@ -340,7 +336,7 @@ proc deleteDoc(docName: string) =
       echo fmt"Deleting book '{book.name}'"
       inDb: dbConn.delete book
       
-  block renameVerses:
+  block deleteVerses:
     var verses = @[newVerse()]
     inDb: dbConn.select(verses, "Verse.docName = ?", dbValue docName)
     if verses.len == 0:
@@ -352,12 +348,70 @@ proc deleteDoc(docName: string) =
 proc deleteAccessTable =
   ## Deletes the access table
   inDb: dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
-  echo fmt"Deleting access table"
+  echo "Deleting access table"
   inDb: sqlite.exec(
     dbConn,
     sql"DROP TABLE Access"
   )
-  echo fmt"Success"
+  echo "Success"
+
+from pkg/bibleTools import identifyBibleBook, enAbbr
+
+proc renameBookNames(docName: string) =
+  ## Renames all book names of the given document to be available to comparison
+  inDb: dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
+  echo fmt"Renaming all books of '{docName}' document"
+  block renameBooks:
+    var
+      books = @[newBook()]
+      booksToEdit: seq[Book]
+    inDb: dbConn.select(books, "Book.docName = ?", dbValue docName)
+    if books.len == 0:
+      echo "No books to rename"
+    for book in books.mitems:
+      let
+        curr = book.shortName
+        next = curr.identifyBibleBook.book.enAbbr
+      if curr != next:
+        echo fmt"Preparing to rename docName of book '{book.name}' from '{curr}' to '{next}'"
+        book.shortName = next
+        booksToEdit.add book
+      else:
+        echo fmt"The book '{book.name}' already have the abbreviation as '{next}'"
+    if booksToEdit.len > 0:
+      echo fmt"Now executing query"
+      inDb: dbConn.update booksToEdit
+  block renameVersesBook:
+    var
+      verses = @[newVerse()]
+      versesToEdit: seq[Verse]
+      needUpdate = false
+    inDb: dbConn.select(verses, "Verse.docName = ?", dbValue docName)
+    if verses.len == 0:
+      echo "No verses to rename"
+    for verse in verses.mitems:
+      let
+        curr = verse.bookShortName
+        next = curr.identifyBibleBook.book.enAbbr
+      if curr != next:
+        echo fmt"Preparing to rename bookShortName of verse '{verse}' from '{curr}' to '{next}'"
+        verse.bookShortName = next
+        versesToEdit.add verse
+      else:
+        echo fmt"The verse '{verse}' already have the book abbreviation as '{next}'"
+    if versesToEdit.len > 0:
+      echo fmt"Now executing query"
+      inDb: dbConn.update versesToEdit
+
+proc getAllDocuments =
+  ## Echoes all short name of documents
+  inDb: dbConn = sqlite.open(dbHost, dbUser, dbPass, "")
+  var documents = @[newDocument()]
+  inDb: dbConn.selectAll documents
+  if documents.len == 0:
+    echo "There's no documents"
+  for doc in documents.mitems:
+    echo doc.shortName
 
 when isMainModule:
   import pkg/cligen
@@ -366,14 +420,18 @@ when isMainModule:
   ], [
     addDb,
     short = {"docName": 'n'}
-  ],[
+  ], [
     updateChaptersQuantity
-  ],[
+  ], [
     renameDocName
-  ],[
+  ], [
     deleteDoc
-  ],[
+  ], [
     deleteAccessTable
+  ], [
+    renameBookNames
+  ], [
+    getAllDocuments
   ])
 else:
   {.fatal: "This app cannot be imported.".}

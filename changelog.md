@@ -1,9 +1,12 @@
 # Changelog
 
-## Version 3.6.0 (21/03/2023)
+## Version 3.6.0 (26/03/2023)
 
-<!-- - Using [thisago/bibleTools](https://git.ozzuu.com/thisago/bibleTools) lib to -->
+- Using [thisago/bibleTools](https://git.ozzuu.com/thisago/bibleTools) lib to
   parse book name (closes)
+- Added `renameBookNames` command
+- Added `getAllDocuments` command
+- Fixed performance of `renameBookNames`
 - Fixed #10
 
 ---
