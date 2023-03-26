@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 3.7.0 (27/03/2023)
+## Version 3.7.0 (26/03/2023)
 
 - Added complete book name to pages (english parsed)
 - Added complete document name to book list page
