@@ -2,7 +2,7 @@
 
 version       = "3.5.1"
 author        = "Ozzuu"
-description   = "Ozzuu Bible is a online MyBible document reader"
+description   = "Finally a online bible that respects your privacy!"
 license       = "MIT"
 srcDir        = "src"
 bin           = @["bible"]
