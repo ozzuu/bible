@@ -4,11 +4,11 @@ Online MyBible document reader
 
 ## Screenshots
 
-![Books page](images/books.png) 
-![Chapters page](images/chapters.png) 
-![Compare page](images/compare.png) 
-![Documents page](images/documents.png) 
-![Search page](images/search.png) 
+![Books page](images/books.png)
+![Chapters page](images/chapters.png)
+![Compare page](images/compare.png)
+![Documents page](images/documents.png)
+![Search page](images/search.png)
 ![Verses page](images/verses.png)
 
 ## TODO
