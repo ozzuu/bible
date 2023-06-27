@@ -5,7 +5,7 @@
 #### 
 Finally a online bible that respects your privacy!
 
-**[About](#about) - [Stack](#stack) - [Features](#features) - [How it Works](#how-it-works) - [Getting started](#getting-started)** - [License](#license)
+**[About](#about)** - [License](#license)
 
 </div>
 
