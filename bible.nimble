@@ -1,9 +1,9 @@
 # Package
 
-version       = "3.5.1"
+version       = "3.8.0"
 author        = "Ozzuu"
 description   = "Finally a online bible that respects your privacy!"
-license       = "MIT"
+license       = "GPL-3.0"
 srcDir        = "src"
 bin           = @["bible"]
 

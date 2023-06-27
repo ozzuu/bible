@@ -1,15 +1,40 @@
-# Ozzuu Bible
+<div align=center>
 
-Online MyBible document reader
+# **Ozzuu Bible**
 
-## Screenshots
+#### 
+Finally a online bible that respects your privacy!
 
-![Documents page](images/documents.png)
-![Books page](images/books.png)
-![Chapters page](images/chapters.png)
-![Verses page](images/verses.png)
-![Compare page](images/compare.png)
-![Search page](images/search.png)
+**[About](#about) - [Stack](#stack) - [Features](#features) - [How it Works](#how-it-works) - [Getting started](#getting-started)** - [License](#license)
+
+</div>
+
+[![Documents page](images/documents.png)](https://bible.ozzuu.com/)
+_Documents page_
+
+---
+[![Books page](images/books.png)](https://bible.ozzuu.com/pt_yah)
+_Books page_
+
+---
+[![Chapters page](images/chapters.png)](https://bible.ozzuu.com/pt_yah/Gen)
+_Chapters page_
+
+---
+[![Verses page](images/verses.png)](https://bible.ozzuu.com/pt_yah/Gen/6#2)
+_Verses page_
+
+---
+[![Compare page](images/compare.png)](https://bible.ozzuu.com/compare/Gen/6/4#pt_yah)
+_Compare page_
+
+---
+[![Search page](images/search.png)](https://bible.ozzuu.com/pt_yah/search/nicolaíta/1)
+_Search page_
+
+## About
+
+Ozzuu Bible is online MyBible document reader
 
 ## TODO
 
@@ -30,7 +55,8 @@ Online MyBible document reader
   - [ ] Add to view (optionally hidden)
 - [x] Allow compare same books with different names like: Gen and Gn
 - [ ] Add custom styling for printing
+- [ ] Improve readme
 
 ## License
 
-MIT
+This software is FOSS, licensed over GPL-3.

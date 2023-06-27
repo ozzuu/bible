@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 3.8.0 (27/06/2023)
+
+- Changed color theme to darker; updated prints 
+
 ## Version 3.7.0 (26/03/2023)
 
 - Added complete book name to pages (english parsed)
