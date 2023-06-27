@@ -2,11 +2,9 @@
 
 # **Ozzuu Bible**
 
-#### 
-Finally a online bible that respects your privacy!
+#### Finally a online bible that respects your privacy!
 
 **[About](#about)** - [License](#license)
-
 </div>
 
 [![Documents page](images/documents.png)](https://bible.ozzuu.com/)
