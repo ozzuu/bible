@@ -43,7 +43,7 @@ proc render*(ctx: Context; access: Access; view: View) =
               text "ozzuu/bible"
           tdiv(class = "credits"):
             text "Made with ♥ by "
-            a(href = "https://thisago.co", rel = "noreferrer",
+            a(href = "https://thisago.com", rel = "noreferrer",
                 target = "_blank"):
               text "thisago"
           tdiv(class = "glory"):
